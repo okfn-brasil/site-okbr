@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="208.068" height="196" viewBox="0 0 208.068 196">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-2, .cls-3 {
+        fill: none;
+        stroke-width: 4px;
+      }
+
+      .cls-2 {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-3 {
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+    <linearGradient id="linear-gradient" y1="0.5" x2="1" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#00cb8d" stop-opacity="0.749"/>
+      <stop offset="1" stop-color="#00cb8d" stop-opacity="0.149"/>
+    </linearGradient>
+  </defs>
+  <g id="Icone_Diversidade" transform="translate(2317.71 -1943.734)">
+    <g id="Grupo_747" data-name="Grupo 747" transform="translate(-2317.71 1943.734)">
+      <path id="União_9" data-name="União 9" class="cls-1" d="M45.722,94.118A47.067,47.067,0,1,1,78.079,82.479h.144l-32.5,32.5Z" transform="translate(0 12.245)"/>
+      <path id="União_10" data-name="União 10" class="cls-1" d="M15.914,82.479h.145a47.069,47.069,0,1,1,32.356,11.64v20.861Z" transform="translate(113.931)"/>
+      <circle id="Elipse_220" data-name="Elipse 220" class="cls-2" cx="22.041" cy="22.041" r="22.041" transform="translate(138.958 25.167)"/>
+      <rect id="Retângulo_686" data-name="Retângulo 686" class="cls-2" width="35.734" height="35.734" transform="translate(47.069 34.185) rotate(45)"/>
+    </g>
+    <path id="União_11" data-name="União 11" class="cls-3" d="M30.165,99.1V88.862a54.841,54.841,0,0,1-22.281,4.7V66.022H0V38.939H.1Q0,37.585,0,36.205a36.205,36.205,0,0,1,72.41,0q0,1.38-.1,2.734h.1V99.1Z" transform="translate(-2208.059 2020.708)"/>
+    <path id="União_12" data-name="União 12" class="cls-3" d="M0,99.1V38.939H.1Q0,37.585,0,36.205a36.205,36.205,0,0,1,72.41,0q0,1.38-.1,2.734h.1V66.022H64.526V93.56a54.845,54.845,0,0,1-22.282-4.7V99.1Z" transform="translate(-2308.315 2038.629)"/>
+  </g>
+</svg>

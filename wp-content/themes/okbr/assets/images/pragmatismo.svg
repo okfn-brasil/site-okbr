@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="126.533" height="158.564" viewBox="0 0 126.533 158.564">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-2, .cls-3 {
+        fill: none;
+        stroke-width: 4px;
+      }
+
+      .cls-2 {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-3 {
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+    <linearGradient id="linear-gradient" y1="0.5" x2="1" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#00cb8d" stop-opacity="0.749"/>
+      <stop offset="1" stop-color="#00cb8d" stop-opacity="0.149"/>
+    </linearGradient>
+  </defs>
+  <g id="Grupo_456" data-name="Grupo 456" transform="translate(0 2.829)">
+    <g id="Grupo_453" data-name="Grupo 453" transform="translate(0)">
+      <g id="layer-1" transform="translate(0 28.13)">
+        <ellipse id="Elipse_128" data-name="Elipse 128" class="cls-1" cx="47.788" cy="47.788" rx="47.788" ry="47.788"/>
+        <ellipse id="Elipse_129" data-name="Elipse 129" class="cls-2" cx="33.791" cy="33.791" rx="33.791" ry="33.791" transform="translate(13.997 13.997)"/>
+        <ellipse id="Elipse_130" data-name="Elipse 130" class="cls-2" cx="15.92" cy="15.92" rx="15.92" ry="15.92" transform="translate(31.867 31.867)"/>
+        <rect id="Retângulo_546" data-name="Retângulo 546" class="cls-3" width="75.669" height="14.326" transform="translate(9.564 87.163)"/>
+        <line id="Linha_1059" data-name="Linha 1059" class="cls-3" x1="23.128" y2="23.128" transform="translate(9.045 101.649)"/>
+        <line id="Linha_1060" data-name="Linha 1060" class="cls-3" x1="23.128" y1="23.128" transform="translate(62.105 101.649)"/>
+        <line id="Linha_1061" data-name="Linha 1061" class="cls-3" y2="22.41" transform="translate(47.399 102.367)"/>
+      </g>
+      <g id="layer-2" transform="translate(47.399)">
+        <g id="Grupo_452" data-name="Grupo 452">
+          <line id="Linha_1062" data-name="Linha 1062" class="cls-3" y1="60.1" x2="60.1" transform="translate(0.389 15.818)"/>
+          <path id="Caminho_652" data-name="Caminho 652" class="cls-3" d="M-1020.773,2084.314h-9.527v-9.527" transform="translate(1030.3 -2008.007)"/>
+          <path id="Caminho_653" data-name="Caminho 653" class="cls-3" d="M-894.466,1958.133h-15.489v-15.489" transform="translate(970.772 -1942.644)"/>
+          <path id="Caminho_654" data-name="Caminho 654" class="cls-3" d="M-921.962,1985.629h-15.489V1970.14" transform="translate(984.373 -1956.245)"/>
+          <line id="Linha_1063" data-name="Linha 1063" class="cls-3" y1="13.895" x2="13.895" transform="translate(46.922)"/>
+          <line id="Linha_1064" data-name="Linha 1064" class="cls-3" y1="13.895" x2="13.895" transform="translate(62.411 15.489)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

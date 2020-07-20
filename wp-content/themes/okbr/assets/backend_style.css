@@ -1,0 +1,4 @@
+.acf-table>tbody>tr:nth-child(even) .acf-fields{background: #ededed;}
+.acf-table>tbody>tr:nth-child(even) .acf-row-handle{background: #ededed; color: black;}
+.acf-table>tbody>tr:nth-child(odd) .acf-row-handle{background: #fff;}
+.acf-gallery{height: 214px;}

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="142.55" height="133.465" viewBox="0 0 142.55 133.465">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-2, .cls-3 {
+        fill: none;
+        stroke-width: 4px;
+      }
+
+      .cls-2 {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-3 {
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+    <linearGradient id="linear-gradient" y1="0.5" x2="1" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#00cb8d" stop-opacity="0.749"/>
+      <stop offset="1" stop-color="#00cb8d" stop-opacity="0.149"/>
+    </linearGradient>
+  </defs>
+  <g id="Grupo_546" data-name="Grupo 546" transform="translate(2)">
+    <rect id="Retângulo_588" data-name="Retângulo 588" class="cls-1" width="105.197" height="63.382" transform="translate(34.941 0)"/>
+    <g id="Grupo_542" data-name="Grupo 542" transform="translate(54.407 18.067)">
+      <line id="Linha_1089" data-name="Linha 1089" class="cls-2" x2="66.265" transform="translate(0)"/>
+      <line id="Linha_1090" data-name="Linha 1090" class="cls-2" x2="66.265" transform="translate(0 13.616)"/>
+      <line id="Linha_1091" data-name="Linha 1091" class="cls-2" x2="26.099" transform="translate(0 27.248)"/>
+      <line id="Linha_1092" data-name="Linha 1092" class="cls-2" x2="26.099" transform="translate(37.261 27.248)"/>
+    </g>
+    <rect id="Retângulo_589" data-name="Retângulo 589" class="cls-1" width="45.565" height="39.036" transform="translate(94.985 78.712)"/>
+    <rect id="Retângulo_590" data-name="Retângulo 590" class="cls-1" width="45.565" height="54.753" transform="translate(35.864 78.712)"/>
+    <g id="Grupo_543" data-name="Grupo 543" transform="translate(45.341 91.625)">
+      <line id="Linha_1093" data-name="Linha 1093" class="cls-2" x2="26.611"/>
+      <line id="Linha_1094" data-name="Linha 1094" class="cls-2" x2="26.611" transform="translate(0 13.616)"/>
+      <line id="Linha_1095" data-name="Linha 1095" class="cls-2" x2="10.481" transform="translate(0 27.248)"/>
+    </g>
+    <g id="Grupo_544" data-name="Grupo 544" transform="translate(104.462 91.625)">
+      <line id="Linha_1096" data-name="Linha 1096" class="cls-2" x2="26.611" transform="translate(0)"/>
+      <line id="Linha_1097" data-name="Linha 1097" class="cls-2" x2="13.305" transform="translate(0 13.616)"/>
+    </g>
+    <g id="Grupo_545" data-name="Grupo 545" transform="translate(0 32.53)">
+      <ellipse id="Elipse_134" data-name="Elipse 134" class="cls-3" cx="19.881" cy="19.881" rx="19.881" ry="19.881" transform="translate(9.435 9.435)"/>
+      <ellipse id="Elipse_135" data-name="Elipse 135" class="cls-3" cx="29.316" cy="29.316" rx="29.316" ry="29.316"/>
+      <line id="Linha_1098" data-name="Linha 1098" class="cls-3" x2="21.682" y2="21.682" transform="translate(50.046 50.046)"/>
+    </g>
+  </g>
+</svg>

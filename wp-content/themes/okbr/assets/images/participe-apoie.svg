@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 194.4 197.6">
+  <defs>
+    <style>
+      .a, .b, .d {
+        opacity: 0.6;
+        isolation: isolate;
+      }
+
+      .a {
+        fill: url(#a);
+      }
+
+      .b {
+        fill: url(#b);
+      }
+
+      .c, .e {
+        fill: none;
+        stroke-width: 4px;
+      }
+
+      .c {
+        stroke: #00cb8d;
+        stroke-miterlimit: 10;
+      }
+
+      .d {
+        fill: url(#c);
+      }
+
+      .e {
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+    <linearGradient id="a" data-name="Gradiente sem nome" x1="-194.94" y1="798.44" x2="-193.94" y2="798.44" gradientTransform="matrix(64.61, 0, 0, -64.61, 12705.6, 51694.67)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="b" data-name="Gradiente sem nome 2" x1="-204.02" y1="801.5" x2="-202.6" y2="801.5" gradientTransform="matrix(0, -48.18, -48.18, 0, 38917.54, -9552.61)" xlink:href="#a"/>
+    <linearGradient id="c" data-name="Gradiente sem nome 3" x1="-194.99" y1="798.03" x2="-193.99" y2="798.03" gradientTransform="matrix(65.85, 0, 0, -57.02, 13080.21, 45850.16)" xlink:href="#a"/>
+  </defs>
+  <title>participe-apoie</title>
+  <g>
+    <circle class="a" cx="143.1" cy="107.8" r="32.3"/>
+    <rect class="b" x="274.8" y="219.5" width="48.2" height="48.18" transform="translate(-287.9 73.2) rotate(-45)"/>
+    <rect class="c" x="285.6" y="230.3" width="26.5" height="26.53" transform="translate(-287.9 73.2) rotate(-45)"/>
+    <path class="d" d="M273.4,314.2l-32.9,57h65.8Z" transform="translate(-203.2 -209.5)"/>
+    <path class="c" d="M273.4,336.5l-13.6,23.6H287Z" transform="translate(-203.2 -209.5)"/>
+    <circle class="c" cx="143.1" cy="107.8" r="14.5"/>
+    <path class="e" d="M387.5,350.5h-3.7v.3a8.1,8.1,0,0,0-8.1-8.1h-12v-23a5.9,5.9,0,0,0-5.9-5.9h0a6,6,0,0,0-5.9,5.9v55.4l-12.2-12.2a7.5,7.5,0,0,0-10.6,0h0a7.5,7.5,0,0,0,0,10.6l31.1,31.1v.5h20.5a14.9,14.9,0,0,0,14.9-14.9h0V358.6a8.1,8.1,0,0,0-8.1-8.1Z" transform="translate(-203.2 -209.5)"/>
+    <path class="e" d="M292,246.9H235.8l12.4-12.4a7.6,7.6,0,0,0,0-10.8h0a7.8,7.8,0,0,0-10.8,0h0l-31.6,31.6h-.4v17.8a6.8,6.8,0,0,0-.2,1.4h0a5.9,5.9,0,0,0,.2,1.3v.3a15.1,15.1,0,0,0,15.1,15.2h32.1a8.2,8.2,0,0,0,8.2-8.2v-2.6h9.3a6,6,0,0,0,6-6h0a6.3,6.3,0,0,0-1.2-3.7H281a6,6,0,0,0,.9-11.9H292a6,6,0,0,0,6-6h0a6,6,0,0,0-6-6Z" transform="translate(-203.2 -209.5)"/>
+  </g>
+</svg>

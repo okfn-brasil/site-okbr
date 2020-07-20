@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="226" height="138.007" viewBox="0 0 226 138.007">
+  <defs>
+    <style>
+      .cls-1, .cls-3 {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 4px;
+      }
+
+      .cls-1 {
+        stroke: #fff;
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-3 {
+        stroke: #000;
+      }
+    </style>
+    <linearGradient id="linear-gradient" y1="0.5" x2="1" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#00cb8d" stop-opacity="0.749"/>
+      <stop offset="1" stop-color="#00cb8d" stop-opacity="0.149"/>
+    </linearGradient>
+  </defs>
+  <g id="Icone_codigo_aberto" transform="translate(-1858.287 -1997.634)">
+    <g id="dark_bg" data-name="dark bg" transform="translate(1997.105 2007.265)">
+      <g id="Grupo_734" data-name="Grupo 734">
+        <path id="Caminho_710" data-name="Caminho 710" class="cls-1" d="M2142.135,2034.383s-19.069,22.906-42.591,22.906-42.591-22.906-42.591-22.906,19.069-22.905,42.591-22.905S2142.135,2034.383,2142.135,2034.383Z" transform="translate(-2056.953 -2011.478)"/>
+        <circle id="Elipse_211" data-name="Elipse 211" class="cls-1" cx="17.508" cy="17.508" r="17.508" transform="translate(25.083 5.397)"/>
+      </g>
+    </g>
+    <g id="layer-2" transform="translate(1860.288 1997.634)">
+      <g id="Grupo_736" data-name="Grupo 736" transform="translate(34.182)">
+        <rect id="Retângulo_680" data-name="Retângulo 680" class="cls-2" width="118.007" height="71.243" transform="translate(0 23.584)"/>
+        <rect id="Retângulo_681" data-name="Retângulo 681" class="cls-2" width="118.007" height="19.262"/>
+        <g id="Grupo_735" data-name="Grupo 735" transform="translate(21.98 41.145)">
+          <path id="Caminho_711" data-name="Caminho 711" class="cls-3" d="M2025.045,2056.777l15.59,15.59-14.751,14.751" transform="translate(-1966.589 -2056.777)"/>
+          <path id="Caminho_712" data-name="Caminho 712" class="cls-3" d="M1956.608,2088.769l-15.59-15.591,14.751-14.751" transform="translate(-1941.017 -2057.279)"/>
+        </g>
+        <circle id="Elipse_212" data-name="Elipse 212" class="cls-3" cx="4.331" cy="4.331" r="4.331" transform="translate(8.399 5.3)"/>
+        <circle id="Elipse_213" data-name="Elipse 213" class="cls-3" cx="4.331" cy="4.331" r="4.331" transform="translate(23.593 5.3)"/>
+        <circle id="Elipse_214" data-name="Elipse 214" class="cls-3" cx="4.331" cy="4.331" r="4.331" transform="translate(38.786 5.3)"/>
+      </g>
+      <g id="Grupo_737" data-name="Grupo 737" transform="translate(0 56.022)">
+        <rect id="Retângulo_682" data-name="Retângulo 682" class="cls-1" width="65.789" height="42.347" rx="12" transform="translate(0 37.637)"/>
+        <path id="Caminho_713" data-name="Caminho 713" class="cls-1" d="M1881.8,2115.493v-19.4a17.98,17.98,0,0,1,17.927-17.927h0a17.98,17.98,0,0,1,17.927,17.927v2.814" transform="translate(-1866.835 -2078.162)"/>
+        <circle id="Elipse_215" data-name="Elipse 215" class="cls-1" cx="7.798" cy="7.798" r="7.798" transform="translate(25.096 47.658)"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="733.857" height="733.857" viewBox="0 0 733.857 733.857">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-7, .cls-8 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-8 {
+        stroke: #fff;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-7 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1 {
+        stroke-width: 2px;
+        opacity: 0.3;
+      }
+
+      .cls-2 {
+        stroke-width: 2.1px;
+        opacity: 0.25;
+      }
+
+      .cls-3 {
+        stroke-width: 2.2px;
+        opacity: 0.2;
+      }
+
+      .cls-4 {
+        stroke-width: 2.3px;
+        opacity: 0.15;
+      }
+
+      .cls-5 {
+        stroke-width: 2.4px;
+        opacity: 0.1;
+      }
+
+      .cls-6 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-7 {
+        stroke: #000;
+        stroke-width: 6px;
+      }
+
+      .cls-8 {
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 4px;
+      }
+    </style>
+    <linearGradient id="linear-gradient" y1="0.46" x2="1" y2="0.445" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#00cb8d" stop-opacity="0.749"/>
+      <stop offset="1" stop-color="#006647" stop-opacity="0.22"/>
+    </linearGradient>
+  </defs>
+  <g id="Icone_Dùvidas" data-name="Icone Dùvidas" transform="translate(-726.8 -3300.134)">
+    <g id="Grupo_496" data-name="Grupo 496" transform="translate(10.146 -76.023)">
+      <circle id="Elipse_114" data-name="Elipse 114" class="cls-1" cx="199.067" cy="199.067" r="199.067" transform="translate(884.516 3544.019)"/>
+      <circle id="Elipse_115" data-name="Elipse 115" class="cls-2" cx="240.733" cy="240.733" r="240.733" transform="translate(842.851 3502.353)"/>
+      <circle id="Elipse_116" data-name="Elipse 116" class="cls-3" cx="282.398" cy="282.398" r="282.398" transform="translate(801.185 3460.688)"/>
+      <circle id="Elipse_117" data-name="Elipse 117" class="cls-4" cx="324.063" cy="324.063" r="324.063" transform="translate(759.52 3419.022)"/>
+      <circle id="Elipse_118" data-name="Elipse 118" class="cls-5" cx="365.729" cy="365.729" r="365.729" transform="translate(717.855 3377.357)"/>
+    </g>
+    <g id="Grupo_615" data-name="Grupo 615" transform="translate(3195.919 161.084)">
+      <path id="Caminho_696" data-name="Caminho 696" class="cls-6" d="M-2115.561,3392.3a69.59,69.59,0,0,1,98.417,0,69.591,69.591,0,0,1,0,98.417c-1.1,1.1-2.234,2.136-3.385,3.146h.24l-48.053,48.053v-30.864a69.336,69.336,0,0,1-47.218-20.335A69.592,69.592,0,0,1-2115.561,3392.3Z" transform="translate(4.077 26)"/>
+      <g id="Grupo_614" data-name="Grupo 614" transform="translate(-2077.73 3426.748)">
+        <path id="Caminho_697" data-name="Caminho 697" class="cls-7" d="M-2045.853,3428.727a37.176,37.176,0,0,1,3.539-3.215,26.7,26.7,0,0,1,4.416-2.857,25.13,25.13,0,0,1,5.324-2.013,25.312,25.312,0,0,1,6.331-.746,24.09,24.09,0,0,1,7.727,1.266,20.89,20.89,0,0,1,6.656,3.636,18.1,18.1,0,0,1,4.642,5.779,16.723,16.723,0,0,1,1.753,7.759,20.783,20.783,0,0,1-1.591,8.506,24.032,24.032,0,0,1-3.993,6.266,34.8,34.8,0,0,1-5.194,4.773q-2.793,2.078-5.227,3.928a27.893,27.893,0,0,0-4.091,3.733,6.513,6.513,0,0,0-1.72,4.22l-.39,11.169h-1.039v-11.3a7.011,7.011,0,0,1,1.591-4.513,23.835,23.835,0,0,1,4.026-3.863q2.436-1.883,5.227-3.9a34.1,34.1,0,0,0,5.227-4.675,23.54,23.54,0,0,0,4.026-6.136,19.577,19.577,0,0,0,1.591-8.214,15.642,15.642,0,0,0-1.624-7.208,16.9,16.9,0,0,0-4.285-5.389,19.029,19.029,0,0,0-6.136-3.376,22.345,22.345,0,0,0-7.175-1.169,22.23,22.23,0,0,0-7.987,1.3,28.294,28.294,0,0,0-5.682,2.857,23.2,23.2,0,0,0-3.571,2.857q-1.266,1.3-1.526,1.3a.7.7,0,0,1-.52-.324Zm12.24,65.465a5.5,5.5,0,0,1,1.562-3.925,5.086,5.086,0,0,1,3.841-1.646,5.357,5.357,0,0,1,3.925,1.646,5.353,5.353,0,0,1,1.646,3.925,5.083,5.083,0,0,1-1.646,3.841,5.506,5.506,0,0,1-3.925,1.562,5.221,5.221,0,0,1-3.841-1.562A5.216,5.216,0,0,1-2033.614,3494.192Z" transform="translate(2045.853 -3419.896)"/>
+      </g>
+      <path id="União_8" data-name="União 8" class="cls-8" d="M0,153.431V60.286H.158Q0,58.189,0,56.052a56.052,56.052,0,0,1,112.1,0q0,2.137-.158,4.234h.158v41.928H99.9v42.633a84.91,84.91,0,0,1-34.5-7.273v15.857Z" transform="translate(-2210.919 3460.485)"/>
+    </g>
+  </g>
+</svg>
