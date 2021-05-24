@@ -79,7 +79,7 @@ date_default_timezone_set('America/Sao_Paulo');
 		    remove_submenu_page('options-general.php', 'options-media.php');
 		    remove_submenu_page('options-general.php', 'options-discussion.php');
 		    remove_submenu_page('options-general.php', 'options-writing.php');
-		    remove_submenu_page('options-general.php', 'options-reading.php');
+		    // remove_submenu_page('options-general.php', 'options-reading.php');
 		    //remove_submenu_page('options-general.php', 'options-permalink.php');
 		    remove_submenu_page('options-general.php', 'privacy.php');
 	    }
