@@ -91,7 +91,7 @@ date_default_timezone_set('America/Sao_Paulo');
 	        unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_activity']);
 	        unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_incoming_links']);
 	        unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_right_now']);
-	        unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_plugins']);
+	        // unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_plugins']);
 	        unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_recent_comments']);
 	        unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_primary']);
 	        unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_quick_press']);
@@ -106,14 +106,14 @@ date_default_timezone_set('America/Sao_Paulo');
 	    }
 
 	/* Images */
-		add_filter('intermediate_image_sizes_advanced', 'removeImages');
-		function removeImages($sizes){
-			unset( $sizes['thumbnail']);
-			unset( $sizes['medium']);
-			unset( $sizes['medium_large']);
-			unset( $sizes['large']);
-			return $sizes;
-		}
+		// add_filter('intermediate_image_sizes_advanced', 'removeImages');
+		// function removeImages($sizes){
+		// 	unset( $sizes['thumbnail']);
+		// 	unset( $sizes['medium']);
+		// 	unset( $sizes['medium_large']);
+		// 	unset( $sizes['large']);
+		// 	return $sizes;
+		// }
 
 		add_action('init', 'imageSizes');
 		function imageSizes() {
@@ -220,15 +220,15 @@ date_default_timezone_set('America/Sao_Paulo');
 
 /* Includes */
 	// ACF
-	add_filter('acf/settings/path', 'my_acf_settings_path');
-	function my_acf_settings_path( $path ) { $path = get_stylesheet_directory() . '/plugins/acf/';  return $path; }
-	add_filter('acf/settings/dir', 'my_acf_settings_dir');
-	function my_acf_settings_dir( $dir ) { $dir = get_stylesheet_directory_uri() . '/plugins/acf/'; return $dir; }
-	add_filter('acf/settings/show_admin', '__return_false');
-	include_once( get_stylesheet_directory() . '/plugins/acf/acf.php' );
+	// add_filter('acf/settings/path', 'my_acf_settings_path');
+	// function my_acf_settings_path( $path ) { $path = get_stylesheet_directory() . '/plugins/acf/';  return $path; }
+	// add_filter('acf/settings/dir', 'my_acf_settings_dir');
+	// function my_acf_settings_dir( $dir ) { $dir = get_stylesheet_directory_uri() . '/plugins/acf/'; return $dir; }
+	// add_filter('acf/settings/show_admin', '__return_false');
+	// include_once( get_stylesheet_directory() . '/plugins/acf/acf.php' );
 
 	include_once("include/customs.php");
-	include_once("include/fields.php");
+	//include_once("include/fields.php");
 
 /* Sistema */
 	function newsletter($email){
