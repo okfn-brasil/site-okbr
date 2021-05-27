@@ -58,7 +58,7 @@
 			"hierarchical" => false,
 			"query_var" => true,
 			"menu_position" => 1,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 			"taxonomies" => array("post_tag")
 		));
 		register_post_type( "projeto", array(
@@ -91,7 +91,7 @@
 			"rewrite" => array( "slug" => "projetos", "hierarchical" => false, "with_front" => false ),
 			"query_var" => true,
 			"menu_position" => 2,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 		register_post_type( "eixo", array(
 			"labels" => array(

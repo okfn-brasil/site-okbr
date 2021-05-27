@@ -72,9 +72,9 @@ date_default_timezone_set('America/Sao_Paulo');
 	        remove_menu_page('edit-comments.php');
 	        remove_menu_page('tools.php');
 	        
-		    remove_submenu_page('themes.php', 'themes.php');
-		    remove_submenu_page('themes.php', 'theme-editor.php');
-		    remove_submenu_page('themes.php', 'customize.php?return=%2Fokbr%2Fwordpress%2Fwp-admin%2Fthemes.php');
+		    // remove_submenu_page('themes.php', 'themes.php');
+		    // remove_submenu_page('themes.php', 'theme-editor.php');
+		    // remove_submenu_page('themes.php', 'customize.php?return=%2Fokbr%2Fwordpress%2Fwp-admin%2Fthemes.php');
 
 		    remove_submenu_page('options-general.php', 'options-media.php');
 		    remove_submenu_page('options-general.php', 'options-discussion.php');
@@ -218,6 +218,7 @@ date_default_timezone_set('America/Sao_Paulo');
 		    return $buttons;
 		}
 
+
 /* Includes */
 	// ACF
 	// add_filter('acf/settings/path', 'my_acf_settings_path');
@@ -339,3 +340,9 @@ date_default_timezone_set('America/Sao_Paulo');
 	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 	remove_action( 'wp_print_styles', 'print_emoji_styles' );
 	remove_filter( 'the_content', 'wp_staticize_emoji' );
+
+	
+
+	wp_enqueue_style( 'stylesheet', get_template_directory_uri() . '/assets/style_geral.css' );
+	
+	
