@@ -28,6 +28,7 @@
 
 /* PostTypes */
 	add_action( 'init', 'registerPostypes', 2 );
+	add_theme_support( 'post-thumbnails' );
 	function registerPostypes() {
 		register_post_type( "noticia", array(
 			"labels" => array(
@@ -91,7 +92,7 @@
 			"rewrite" => array( "slug" => "projetos", "hierarchical" => false, "with_front" => false ),
 			"query_var" => true,
 			"menu_position" => 2,		
-			"supports" => array("title", "thumbnail"),
+			"supports" => array("title"),
 		));
 		register_post_type( "eixo", array(
 			"labels" => array(

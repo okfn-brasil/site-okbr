@@ -106,7 +106,7 @@ date_default_timezone_set('America/Sao_Paulo');
 	    }
 
 	/* Images */
-		// add_filter('intermediate_image_sizes_advanced', 'removeImages');
+		//add_filter('intermediate_image_sizes_advanced', 'removeImages');
 		// function removeImages($sizes){
 		// 	unset( $sizes['thumbnail']);
 		// 	unset( $sizes['medium']);
