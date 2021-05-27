@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set('America/Sao_Paulo');
 
+
 /* Functions */
 	function tu($echo=true){
 		if($echo){ 
@@ -162,6 +163,7 @@ date_default_timezone_set('America/Sao_Paulo');
 
 	/* Estilos */
 		add_action('admin_enqueue_scripts', 'backend_style');
+
 		function backend_style() {
 		  wp_enqueue_style('backend-styles', get_template_directory_uri().'/assets/backend_style.css');
 		}
@@ -341,8 +343,8 @@ date_default_timezone_set('America/Sao_Paulo');
 	remove_action( 'wp_print_styles', 'print_emoji_styles' );
 	remove_filter( 'the_content', 'wp_staticize_emoji' );
 
-	
 
 	wp_enqueue_style( 'stylesheet', get_template_directory_uri() . '/assets/style_geral.css' );
+	wp_enqueue_script( 'script_geral', get_template_directory_uri() . '/assets/script_geral.js', array('jquery'));
 	
 	
