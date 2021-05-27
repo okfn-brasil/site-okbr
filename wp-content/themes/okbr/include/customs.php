@@ -92,7 +92,7 @@
 			"rewrite" => array( "slug" => "projetos", "hierarchical" => false, "with_front" => false ),
 			"query_var" => true,
 			"menu_position" => 2,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 		register_post_type( "eixo", array(
 			"labels" => array(
@@ -124,7 +124,7 @@
 			"rewrite" => array( "slug" => "eixos-de-atuacao", "hierarchical" => false, "with_front" => false ),
 			"query_var" => true,
 			"menu_position" => 2,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 		register_post_type( "rede", array(
 			"labels" => array(
@@ -155,7 +155,7 @@
 			"hierarchical" => false,
 			"query_var" => true,
 			"menu_position" => 3,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 		register_post_type( "colaborador", array(
 			"labels" => array(
@@ -186,7 +186,7 @@
 			"hierarchical" => false,
 			"query_var" => true,
 			"menu_position" => 3,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 		register_post_type( "evento", array(
 			"labels" => array(
@@ -218,7 +218,7 @@
 			"query_var" => true,
 			"rewrite" => array( "slug" => "eventos", "with_front" => true ),
 			"menu_position" => 3,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 		register_post_type( "clipping", array(
 			"labels" => array(
@@ -250,7 +250,7 @@
 			"query_var" => true,
 			"rewrite" => array( "slug" => "clippings", "with_front" => true ),
 			"menu_position" => 3,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 	}
 
