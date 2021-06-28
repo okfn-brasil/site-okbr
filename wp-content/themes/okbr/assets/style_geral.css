@@ -28,6 +28,12 @@
     margin-left:15px;
 }
 
+.projects.slick-slider .slick-prev.slick-arrow,
+.projects.slick-slider .slick-next.slick-arrow {
+    border-left: 7px solid #fff;
+    border-bottom: 7px solid #fff;
+}
+
 .lista-horizontal li {
     position: relative;
 }
