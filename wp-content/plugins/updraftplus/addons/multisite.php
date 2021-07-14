@@ -275,7 +275,7 @@ if (is_multisite()) {
 					$options[$key] = $value;
 				} elseif ('updraft_dir' == $key) {
 					$options[$key] = UpdraftPlus_Manipulation_Functions::prune_updraft_dir_prefix($value);
-				} elseif ('updraft_updraftvault' !== $key && preg_match('/^updraft_(.*)$/', $key, $matches) && in_array($matches[1], $backup_methods)) {
+				} elseif (preg_match('/^updraft_(.*)$/', $key, $matches) && in_array($matches[1], $backup_methods)) {
 					$options[$key] = call_user_func(array($updraftplus, 'storage_options_filter'), $value, $key);
 				} elseif (preg_match("/^updraft_/", $key)) {
 					$options[$key] = $value;
