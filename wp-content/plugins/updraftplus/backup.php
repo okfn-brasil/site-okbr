@@ -1827,28 +1827,43 @@ class UpdraftPlus_Backup {
 			$updraftplus->log("PHP function is disabled; abort expected: gzopen()");
 		}
 
+		$decompress_mode = (defined('UPDRAFTPLUS_DB_STICH_DECOMPRESS') && UPDRAFTPLUS_DB_STICH_DECOMPRESS);
+		
 		if (false === $this->backup_db_open($backup_final_file_name, true)) return false;
 
 		$this->backup_db_header();
-
+		
+		// Re-open in plain binary append mode
+		if (!$decompress_mode) {
+			$this->backup_db_close();
+			if (false === $this->backup_db_open($backup_final_file_name, false, true)) return false;
+		}
+		
 		// We delay the unlinking because if two runs go concurrently and fail to detect each other (should not happen, but there's no harm in assuming the detection failed) then that would lead to files missing from the db dump
 		$unlink_files = array();
 
 		$sind = 1;
 		
+		// Happily they have the same syntax (as far as we need it)
+		// Concatenating gz files produces a valid gz file. So, decompressing is not necessary. We retain the possibility for debugging and the possibility of broken implementations.
+		$open_function = $decompress_mode ? 'gzopen' : 'fopen';
+		$fgets_function = $decompress_mode ? 'gzgets' : 'fgets';
+		$close_function = $decompress_mode ? 'gzclose' : 'fclose';
+		
 		foreach ($stitch_files as $table => $table_stitch_files) {
 			ksort($table_stitch_files);
 			foreach ($table_stitch_files as $table_file) {
-				$updraftplus->log("{$table_file} ($sind/$how_many_tables): adding to final database dump");
-				if (!$handle = gzopen($this->updraft_dir.'/'.$table_file, "r")) {
+				$updraftplus->log("{$table_file} ($sind/$how_many_tables/$open_function): adding to final database dump");
+
+				if (!$handle = call_user_func($open_function, $this->updraft_dir.'/'.$table_file, "r")) {
 					$updraftplus->log("Error: Failed to open database file for reading: ${table_file}.gz");
 					$updraftplus->log(__("Failed to open database file for reading:", 'updraftplus').' '.$table_file, 'error');
 					$errors++;
 				} else {
-					while ($line = gzgets($handle, 65536)) {
+					while ($line = call_user_func($fgets_function, $handle, 65536)) {
 						$this->stow($line);
 					}
-					gzclose($handle);
+					call_user_func($close_function, $handle);
 					$unlink_files[] = $this->updraft_dir.'/'.$table_file;
 				}
 				$sind++;
@@ -1857,6 +1872,12 @@ class UpdraftPlus_Backup {
 			}
 		}
 
+		// Re-open in gz append mode
+		if (!$decompress_mode) {
+			$this->backup_db_close();
+			if (false === $this->backup_db_open($backup_final_file_name, true, true)) return false;
+		}
+		
 		// DB triggers
 		if ($this->wpdb_obj->get_results("SHOW TRIGGERS")) {
 			// N.B. DELIMITER is not a valid SQL command; you cannot pass it to the server. It has to be interpreted by the interpreter - e.g. /usr/bin/mysql, or UpdraftPlus, and used to interpret what follows. The effect of this is that using it means that some SQL clients will stumble; but, on the other hand, failure to use it means that others that don't have special support for CREATE TRIGGER may stumble, because they may feed incomplete statements to the SQL server. Since /usr/bin/mysql uses it, we choose to support it too (both reading and writing).
@@ -2036,23 +2057,27 @@ class UpdraftPlus_Backup {
 		$ret = false;
 		$any_output = false;
 		$writes = 0;
-		$handle = function_exists('popen') ? popen($exec, "r") : false;
+		$write_bytes = 0;
+		$handle = function_exists('popen') ? popen($exec, 'r') : false;
 		if ($handle) {
 			while (!feof($handle)) {
-				$w = fgets($handle);
-				if ($w) {
+				$w = fgets($handle, 1048576);
+				if (is_string($w) && $w) {
 					$this->stow($w);
 					$writes++;
+					$write_bytes += strlen($w);
 					$any_output = true;
 				}
 			}
 			$ret = pclose($handle);
+			// The manual page for pclose() claims that only -1 indicates an error, but this is untrue
 			if (0 != $ret) {
 				$updraftplus->log("Binary mysqldump: error (code: $ret)");
 				// Keep counter of failures? Change value of binsqldump?
+				$ret = false;
 			} else {
 				if ($any_output) {
-					$updraftplus->log("Table $table_name: binary mysqldump finished (writes: $writes) in ".sprintf("%.02f", max(microtime(true)-$microtime, 0.00001))." seconds");
+					$updraftplus->log("Table $table_name: binary mysqldump finished (writes: $writes, bytes $write_bytes, return code $ret) in ".sprintf("%.02f", max(microtime(true)-$microtime, 0.00001))." seconds");
 					$ret = true;
 				}
 			}
@@ -2629,21 +2654,23 @@ class UpdraftPlus_Backup {
 	 * Open a file, store its filehandle
 	 *
 	 * @param String  $file     Full path to the file to open
-	 * @param Boolean $allow_gz Use gzopen() if available, instead of fopen()
+	 * @param Boolean $allow_gz	Use gzopen() if available, instead of fopen()
+	 * @param Boolean $append	Use append mode for writing
 	 *
 	 * @return Resource - the opened file handle
 	 */
-	public function backup_db_open($file, $allow_gz = true) {
-		if (function_exists('gzopen') && true == $allow_gz) {
-			$this->dbhandle = gzopen($file, 'w');
+	public function backup_db_open($file, $allow_gz = true, $append = false) {
+		$mode = $append ? 'ab' : 'w';
+		if ($allow_gz && function_exists('gzopen')) {
+			$this->dbhandle = gzopen($file, $mode);
 			$this->dbhandle_isgz = true;
 		} else {
-			$this->dbhandle = fopen($file, 'w');
+			$this->dbhandle = fopen($file, $mode);
 			$this->dbhandle_isgz = false;
 		}
 		if (false === $this->dbhandle) {
 			global $updraftplus;
-			$updraftplus->log("ERROR: $file: Could not open the backup file for writing");
+			$updraftplus->log("ERROR: $file: Could not open the backup file for writing (mode: $mode)");
 			$updraftplus->log($file.": ".__("Could not open the backup file for writing", 'updraftplus'), 'error');
 		}
 		$this->db_current_raw_bytes = 0;
@@ -2844,7 +2871,7 @@ class UpdraftPlus_Backup {
 								$this->zipfiles_skipped_notaltered[$deref] = $use_path_when_storing.'/'.$e;
 							}
 						} else {
-							$updraftplus->log("$deref: unreadable file");
+							$updraftplus->log("$deref: unreadable file (de-referenced from the link $e in $fullpath)");
 							$updraftplus->log(sprintf(__("%s: unreadable file - could not be backed up"), $deref), 'warning');
 						}
 					} elseif (is_dir($deref)) {

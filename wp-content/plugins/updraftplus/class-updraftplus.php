@@ -393,6 +393,7 @@ class UpdraftPlus {
 			}
 		}
 		$ret = pclose($handle);
+		// The manual page for pclose() claims that only -1 indicates an error, but this is untrue
 		if (false === $found || 0 != $ret) return false;
 
 		if ((int) $matches[2]<100 || ($matches[1] + $matches[3] != $matches[2])) return false;
@@ -1637,7 +1638,18 @@ class UpdraftPlus {
 			// Allow --max_allowed_packet to be configured via constant. Experience has shown some customers with complex CMS or pagebuilder setups can have extrememly large postmeta entries.
 			$msqld_max_allowed_packet = (defined('UPDRAFTPLUS_MYSQLDUMP_MAX_ALLOWED_PACKET') && (is_int(UPDRAFTPLUS_MYSQLDUMP_MAX_ALLOWED_PACKET) || is_string(UPDRAFTPLUS_MYSQLDUMP_MAX_ALLOWED_PACKET))) ? UPDRAFTPLUS_MYSQLDUMP_MAX_ALLOWED_PACKET : '1M';
 				
-			$exec .= "$potsql --defaults-file=$pfile --max_allowed_packet=$msqld_max_allowed_packet --quote-names --add-drop-table --skip-comments --skip-set-charset --allow-keywords --dump-date --extended-insert --where=option_name=$siteurl --user=".escapeshellarg(DB_USER)." --host=".escapeshellarg(DB_HOST)." ".DB_NAME." ".escapeshellarg($table_name)."";
+			$exec .= "$potsql --defaults-file=$pfile --max_allowed_packet=$msqld_max_allowed_packet --quote-names --add-drop-table";
+			
+			static $mysql_version = null;
+			if (null === $mysql_version) {
+				$mysql_version = $wpdb->get_var('SELECT VERSION()');
+				if ('' == $mysql_version) $mysql_version = $wpdb->db_version();
+			}
+			if ($mysql_version && version_compare($mysql_version, '5.1', '>=')) {
+				$exec .= " --no-tablespaces";
+			}
+			
+			$exec .= " --skip-comments --skip-set-charset --allow-keywords --dump-date --extended-insert --where=option_name=$siteurl --user=".escapeshellarg(DB_USER)." --host=".escapeshellarg(DB_HOST)." ".DB_NAME." ".escapeshellarg($table_name);
 			
 			$handle = function_exists('popen') ? popen($exec, "r") : false;
 			if ($handle) {
@@ -1651,13 +1663,13 @@ class UpdraftPlus {
 					$output = '';
 				}
 				$ret = pclose($handle);
+				// The manual page for pclose() claims that only -1 indicates an error, but this is untrue
 				if (0 != $ret) {
 					if ($log_it) {
 						$this->log("Binary mysqldump: error (code: $ret)");
 					}
 				} else {
-// $dumped = file_get_contents($updraft_dir.'/'.$tmp_file, false, null, 0, 4096);
-					if (stripos($output, 'insert into') !== false) {
+					if (false !== stripos($output, 'insert into')) {
 						if ($log_it) $this->log("Working binary mysqldump found: $potsql");
 						$result = $potsql;
 						break;
@@ -1741,6 +1753,7 @@ class UpdraftPlus {
 						if ($w && $log_it) $this->log("Output: ".trim($w));
 					}
 					$ret = pclose($handle);
+					// The manual page for pclose() claims that only -1 indicates an error, but this is untrue
 					if (0 != $ret) {
 						if ($log_it) $this->log("Binary zip: error (code: $ret)");
 						$all_ok = false;
