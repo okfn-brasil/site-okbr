@@ -68,9 +68,9 @@
                     <?php
                         $noticias_relacionadas = get_field('noticias_relacionadas');
                             if($noticias_relacionadas ): ?>
-                                <article class="col-xs-12 col-sm-10 col-md-8 mb1">  
                                     <?php foreach( $noticias_relacionadas as $post ): 
                                         setup_postdata($post); ?>
+                                        <article class="col-xs-12 col-sm-10 col-md-8 mb1">  
                                         <a href="<?php the_permalink(); ?>" class="cartao cartao-horizontal middle-xs">
                                             <?php
                                                 $img_ = get_field( 'imagem', $noticias_relacionadas->ID );
@@ -87,10 +87,10 @@
                                                 <button class="btn-txt btn-cartao">Leia Mais</button>
                                             </section>
                                         </a>       
+                                    </article>
                                     <?php endforeach; ?>
                                     <?php 
                                     wp_reset_postdata(); ?>
-                                </article>
                             <?php else: ?>
                                 <?php 
                                     while($noticias->have_posts()): $noticias->the_post(); 

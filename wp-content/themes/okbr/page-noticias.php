@@ -219,7 +219,8 @@ get_header(); ?>
                     <a href="<?php echo ($url = get_field('url')) ? $url : get_the_permalink(); ?>" <?php if($url) echo 'target="_blank"' ?> class="cartao cartao-horizontal middle-xs">
                         <?php 
                             $img = get_field('imagem');
-                            $img = $img ? isset($img['sizes']['thumbhor']) ? $img['sizes']['thumbhor'] : $img['url'] :  tu(0).'/assets/images/ph_thumbhor.png';
+                            //echo print_r($img);
+                            //$img = $img ? isset($img['sizes']['thumbhor']) ? $img['sizes']['thumbhor'] : $img['url'] :  tu(0).'/assets/images/ph_thumbhor.png';
                         ?>
                         <figure><img src="<?php echo $img; ?>"></figure>
                         <section class="tcb p2 tl">
