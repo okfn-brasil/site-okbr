@@ -103,13 +103,13 @@
             </header>
 
             <!-- Projetos -->
-            <div class="row start-xs">
+            <div class="start-xs projects">
                 <?php 
-                    $projetos = new WP_Query(array("post_type"=>"projeto","posts_per_page"=>3));
+                    $projetos = new WP_Query(array("post_type"=>"projeto","posts_per_page"=>-1));
                     while($projetos->have_posts()): $projetos->the_post();
                 ?>
                 <!-- Projeto -->
-                <article class="col-xs-12 col-sm-6 col-md-4 mb2">
+                <article class="mb2">
                     <a href="<?php the_permalink(); ?>" class="cartao cartao-vertical">
                         <?php 
                             $img = get_field('imagem');

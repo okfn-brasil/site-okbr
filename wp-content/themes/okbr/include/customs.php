@@ -1,33 +1,34 @@
 <?php
 
 /* Clear default post types */
-	add_action( 'init', 'removePostTypeSupports', 10 );
-	function removePostTypeSupports() {
-		remove_post_type_support("post",'editor');
-		remove_post_type_support("post",'author');
-		remove_post_type_support("post",'thumbnail');
-		remove_post_type_support("post",'excerpt');
-		remove_post_type_support("post",'trackbacks');
-		remove_post_type_support("post",'custom-fields');
-		remove_post_type_support("post",'comments');
-		remove_post_type_support("post",'revisions');
-		remove_post_type_support("post",'page-attributes');
-		remove_post_type_support("post",'post-formats');
+	// add_action( 'init', 'removePostTypeSupports', 10 );
+	// function removePostTypeSupports() {
+	// 	remove_post_type_support("post",'editor');
+	// 	remove_post_type_support("post",'author');
+	// 	remove_post_type_support("post",'thumbnail');
+	// 	remove_post_type_support("post",'excerpt');
+	// 	remove_post_type_support("post",'trackbacks');
+	// 	remove_post_type_support("post",'custom-fields');
+	// 	remove_post_type_support("post",'comments');
+	// 	remove_post_type_support("post",'revisions');
+	// 	remove_post_type_support("post",'page-attributes');
+	// 	remove_post_type_support("post",'post-formats');
 
-		remove_post_type_support("page",'editor');
-		remove_post_type_support("page",'author');
-		remove_post_type_support("page",'thumbnail');
-		remove_post_type_support("page",'excerpt');
-		remove_post_type_support("page",'trackbacks');
-		remove_post_type_support("page",'custom-fields');
-		remove_post_type_support("page",'comments');
-		remove_post_type_support("page",'revisions');
-		remove_post_type_support("page",'page-attributes');
-		remove_post_type_support("page",'post-formats');
-	}
+	// 	remove_post_type_support("page",'editor');
+	// 	remove_post_type_support("page",'author');
+	// 	remove_post_type_support("page",'thumbnail');
+	// 	remove_post_type_support("page",'excerpt');
+	// 	remove_post_type_support("page",'trackbacks');
+	// 	remove_post_type_support("page",'custom-fields');
+	// 	remove_post_type_support("page",'comments');
+	// 	remove_post_type_support("page",'revisions');
+	// 	remove_post_type_support("page",'page-attributes');
+	// 	remove_post_type_support("page",'post-formats');
+	// }
 
 /* PostTypes */
 	add_action( 'init', 'registerPostypes', 2 );
+	add_theme_support( 'post-thumbnails' );
 	function registerPostypes() {
 		register_post_type( "noticia", array(
 			"labels" => array(
@@ -58,7 +59,7 @@
 			"hierarchical" => false,
 			"query_var" => true,
 			"menu_position" => 1,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 			"taxonomies" => array("post_tag")
 		));
 		register_post_type( "projeto", array(
@@ -91,7 +92,7 @@
 			"rewrite" => array( "slug" => "projetos", "hierarchical" => false, "with_front" => false ),
 			"query_var" => true,
 			"menu_position" => 2,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 		register_post_type( "eixo", array(
 			"labels" => array(
@@ -123,7 +124,7 @@
 			"rewrite" => array( "slug" => "eixos-de-atuacao", "hierarchical" => false, "with_front" => false ),
 			"query_var" => true,
 			"menu_position" => 2,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 		register_post_type( "rede", array(
 			"labels" => array(
@@ -154,7 +155,7 @@
 			"hierarchical" => false,
 			"query_var" => true,
 			"menu_position" => 3,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 		register_post_type( "colaborador", array(
 			"labels" => array(
@@ -185,7 +186,7 @@
 			"hierarchical" => false,
 			"query_var" => true,
 			"menu_position" => 3,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 		register_post_type( "evento", array(
 			"labels" => array(
@@ -217,7 +218,7 @@
 			"query_var" => true,
 			"rewrite" => array( "slug" => "eventos", "with_front" => true ),
 			"menu_position" => 3,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 		register_post_type( "clipping", array(
 			"labels" => array(
@@ -249,7 +250,7 @@
 			"query_var" => true,
 			"rewrite" => array( "slug" => "clippings", "with_front" => true ),
 			"menu_position" => 3,		
-			"supports" => array("title"),
+			"supports" => array("title", "thumbnail"),
 		));
 	}
 

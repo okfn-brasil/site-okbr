@@ -1,0 +1,91 @@
+{
+    "key": "group_60ad526b3ef05",
+    "title": "Noticia",
+    "fields": [
+        {
+            "key": "noticia_c_i",
+            "label": "Imagem principal",
+            "name": "imagem",
+            "type": "image_aspect_ratio_crop",
+            "instructions": "340 x 175",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "crop_type": "pixel_size",
+            "aspect_ratio_width": 340,
+            "aspect_ratio_height": 175,
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": 340,
+            "min_height": 175,
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "noticia_c_eixo",
+            "label": "Eixo de atuação",
+            "name": "eixos",
+            "type": "post_object",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": "eixo",
+            "return_format": "id",
+            "multiple": 1,
+            "taxonomy": [],
+            "allow_null": 0,
+            "ui": 1
+        },
+        {
+            "key": "noticia_c_col",
+            "label": "Autores",
+            "name": "colaboradores",
+            "type": "post_object",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": "colaborador",
+            "return_format": "id",
+            "multiple": 1,
+            "taxonomy": [],
+            "allow_null": 0,
+            "ui": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "noticia"
+            }
+        ]
+    ],
+    "menu_order": 1,
+    "position": "normal",
+    "style": "seamless",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "modified": 1625082388
+}

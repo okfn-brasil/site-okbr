@@ -47,6 +47,17 @@ $am_announcement_params = [
 	'fields'      => 'ids',
 ];
 
+/**
+ * Disable Action Schedule Queue Runner, to prevent a fatal error on the shutdown WP hook.
+ */
+if ( class_exists( 'ActionScheduler_QueueRunner' ) ) {
+	$as_queue_runner = \ActionScheduler_QueueRunner::instance();
+
+	if ( method_exists( $as_queue_runner, 'unhook_dispatch_async_request' ) ) {
+		$as_queue_runner->unhook_dispatch_async_request();
+	}
+}
+
 // WP MS uninstall process.
 if ( is_multisite() ) {
 	$main_site_settings = get_blog_option( get_main_site_id(), 'wp_mail_smtp', [] );
@@ -108,6 +119,15 @@ if ( is_multisite() ) {
 		) {
 			$table = \WPMailSMTP\Pro\Emails\Logs\Logs::get_table_name();
 			$wpdb->query( "DROP TABLE IF EXISTS $table;" ); // phpcs:ignore WordPress.DB
+
+			$attachment_files_table = \WPMailSMTP\Pro\Emails\Logs\Attachments\Attachments::get_attachment_files_table_name();
+			$wpdb->query( "DROP TABLE IF EXISTS $attachment_files_table;" ); // phpcs:ignore WordPress.DB
+
+			$email_attachments_table = \WPMailSMTP\Pro\Emails\Logs\Attachments\Attachments::get_email_attachments_table_name();
+			$wpdb->query( "DROP TABLE IF EXISTS $email_attachments_table;" ); // phpcs:ignore WordPress.DB
+
+			// Delete all attachments if any.
+			( new \WPMailSMTP\Pro\Emails\Logs\Attachments\Attachments() )->delete_all_attachments();
 		}
 
 		/*
@@ -167,6 +187,15 @@ if ( is_multisite() ) {
 	) {
 		$table = \WPMailSMTP\Pro\Emails\Logs\Logs::get_table_name();
 		$wpdb->query( "DROP TABLE IF EXISTS $table;" ); // phpcs:ignore WordPress.DB
+
+		$attachment_files_table = \WPMailSMTP\Pro\Emails\Logs\Attachments\Attachments::get_attachment_files_table_name();
+		$wpdb->query( "DROP TABLE IF EXISTS $attachment_files_table;" ); // phpcs:ignore WordPress.DB
+
+		$email_attachments_table = \WPMailSMTP\Pro\Emails\Logs\Attachments\Attachments::get_email_attachments_table_name();
+		$wpdb->query( "DROP TABLE IF EXISTS $email_attachments_table;" ); // phpcs:ignore WordPress.DB
+
+		// Delete all attachments if any.
+		( new \WPMailSMTP\Pro\Emails\Logs\Attachments\Attachments() )->delete_all_attachments();
 	}
 
 	/*
