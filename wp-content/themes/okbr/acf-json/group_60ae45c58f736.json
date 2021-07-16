@@ -1,0 +1,103 @@
+{
+    "key": "group_60ae45c58f736",
+    "title": "Clipping",
+    "fields": [
+        {
+            "key": "clip_c_i",
+            "label": "Imagem principal",
+            "name": "imagem",
+            "type": "image_aspect_ratio_crop",
+            "instructions": "380 x 306",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "crop_type": "pixel_size",
+            "aspect_ratio_width": 380,
+            "aspect_ratio_height": 306,
+            "return_format": "url",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": 380,
+            "min_height": 306,
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "clip_c_v",
+            "label": "Veículo de mídia",
+            "name": "midia",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "clip_c_l",
+            "label": "Link externo",
+            "name": "url",
+            "type": "url",
+            "instructions": "Se preenchido o card levará direto ao link.",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": ""
+        },
+        {
+            "key": "clip_c_d",
+            "label": "Data",
+            "name": "data",
+            "type": "date_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "display_format": "d\/m\/Y",
+            "return_format": "d M \\d\\e Y",
+            "first_day": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "clipping"
+            }
+        ]
+    ],
+    "menu_order": 1,
+    "position": "normal",
+    "style": "seamless",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "modified": 1626444793
+}
