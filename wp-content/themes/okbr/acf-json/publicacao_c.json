@@ -1,28 +1,9 @@
 {
-    "key": "rede_c",
-    "title": "Rede",
+    "key": "publicacao_c",
+    "title": "Publicação",
     "fields": [
         {
-            "key": "rede_c_t",
-            "label": "Descrição",
-            "name": "texto",
-            "type": "text",
-            "instructions": "",
-            "required": false,
-            "conditional_logic": false,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "rede_c_i",
+            "key": "publicacao_c_i",
             "label": "Imagem",
             "name": "imagem",
             "type": "image",
@@ -30,15 +11,15 @@
             "required": false,
             "conditional_logic": false,
             "wrapper": {
-                "width": "",
+                "width": "20%",
                 "class": "",
                 "id": ""
             },
             "return_format": "array",
             "preview_size": "vertical",
-            "min_width": 215,
-            "min_height": 300,
             "library": "all",
+            "min_width": 0,
+            "min_height": 0,
             "min_size": 0,
             "max_width": 0,
             "max_height": 0,
@@ -46,26 +27,29 @@
             "mime_types": ""
         },
         {
-            "key": "rede_c_l",
-            "label": "Link externo",
-            "name": "link",
-            "type": "url",
+            "key": "publicacao_c_t",
+            "label": "Descrição",
+            "name": "descricao",
+            "type": "textarea",
             "instructions": "",
             "required": false,
             "conditional_logic": false,
             "wrapper": {
-                "width": "",
+                "width": "80%",
                 "class": "",
                 "id": ""
             },
+            "new_lines": "br",
+            "rows": 6,
             "default_value": "",
+            "maxlength": "",
             "placeholder": ""
         },
         {
-            "key": "rede_e",
-            "label": "Eixo de atuação",
-            "name": "eixos",
-            "type": "post_object",
+            "key": "publicacao_c_botoes_c_l",
+            "label": "Itens",
+            "name": "itens",
+            "type": "repeater",
             "instructions": "",
             "required": false,
             "conditional_logic": false,
@@ -74,12 +58,28 @@
                 "class": "",
                 "id": ""
             },
-            "post_type": "eixo",
-            "return_format": "object",
-            "multiple": 1,
-            "taxonomy": [],
-            "allow_null": 0,
-            "ui": 1
+            "layout": "table",
+            "min": 1,
+            "max": 0,
+            "button_label": "",
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "publicacao_c_botoes_c_l_tt",
+                    "label": "Link",
+                    "name": "link",
+                    "type": "link",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array"
+                }
+            ]
         }
     ],
     "location": [
@@ -87,7 +87,7 @@
             {
                 "param": "post_type",
                 "operator": "==",
-                "value": "rede"
+                "value": "publicacao"
             }
         ]
     ],

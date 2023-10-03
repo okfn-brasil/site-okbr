@@ -1,12 +1,12 @@
 <?php get_header(); ?>
 <?php get_template_part('block-menu'); ?>
     <main>
-        <article class="container-fluid bg-preto pt7 pt10-sm pb5">
+        <article class="container-fluid hero pt7 pt10-sm pb5">
             <div class="wrap">
                 <div class="row center-xs">
                     <div class="col-xs-12 col-md-7 tl">
-                        <h1 class="t6 w100 ff2 tcb mb2"><?php md_field('titulo'); ?></h1>
-                        <div class="conteudo tcb mb5">
+                        <h1 class="t6 w100 ff2  mb2"><?php md_field('titulo'); ?></h1>
+                        <div class="conteudo  mb5">
                             <?php echo md_text(get_field('descricao',get_the_ID(),false)); ?>
                         </div>
                         <p class="t1 ff2 w400 tcv uc ls1 mb2">Acompanhe nossas redes</p>
@@ -26,13 +26,13 @@
             </div>
         </article>
 
-        <article class="container-fluid bg-cinza-escuro pt5 pb5">
+        <article class="container-fluid bg-roxo pt5 pb5">
             <div class="wrap">
                 <div class="row">
                     <?php while(have_rows('blocos')): the_row(); ?>
                     <div class="col-xs-12 col-md-6 mb3 mb5-md">
-                        <h2 class="t4 w600 tcb lh1-50 mb1"><?php echo md_sub_field('titulo'); ?></h2>
-                        <div class="t3 tccc lh1-50 w400 mb2">
+                        <h2 class="t3 tcb w600  lh1-50 mb1"><?php echo md_sub_field('titulo'); ?></h2>
+                        <div class="t2 tcb  lh1-50 w400 mb2">
                             <?php echo md_sub_field('descricao'); ?>
                         </div>
                         <a href="<?php the_sub_field('link'); ?>"><button class="btn btn-verde mb2"><?php the_sub_field('label'); ?></button></a>
