@@ -203,7 +203,7 @@
 		RewriteCond %{REQUEST_METHOD} POST
 		RewriteCond %{REQUEST_URI} /wp-comments-post\.php$
 		RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
-		RewriteCond %{HTTP_REFERER} !^https?://(([^/]+\.)?escoladedados\.org|jetpack\.wordpress\.com/jetpack-comment)(/|$) [NC]
+		RewriteCond %{HTTP_REFERER} !^https?://(([^/]+\.)?org\.br|jetpack\.wordpress\.com/jetpack-comment)(/|$) [NC]
 		RewriteRule ^.* - [F]
 	</IfModule>
 

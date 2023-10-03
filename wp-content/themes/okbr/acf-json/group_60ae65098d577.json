@@ -46,8 +46,8 @@
             "name": "blocos",
             "type": "repeater",
             "instructions": "",
-            "required": false,
-            "conditional_logic": false,
+            "required": 0,
+            "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -94,7 +94,7 @@
                     "collapsed": "",
                     "min": 0,
                     "max": 0,
-                    "layout": "table",
+                    "layout": "row",
                     "button_label": "",
                     "sub_fields": [
                         {
@@ -133,7 +133,7 @@
                                 "arquivo => Arquivo": "arquivo => Arquivo",
                                 "link => Link externo": "link => Link externo"
                             },
-                            "default_value": "arquivo",
+                            "default_value": "link",
                             "allow_null": 0,
                             "multiple": 0,
                             "ui": 0,
@@ -324,11 +324,11 @@
     ],
     "menu_order": 1,
     "position": "normal",
-    "style": "seamless",
+    "style": "default",
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
     "active": true,
     "description": "",
-    "modified": 1622042811
+    "modified": 1626997593
 }
