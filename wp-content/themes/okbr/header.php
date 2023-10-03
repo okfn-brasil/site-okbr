@@ -14,6 +14,6 @@
     </title>
 	<?php wp_head(); ?>
 	<link rel="icon" type="image/png" href="<?php tu(); ?>/assets/images/icon.png" />
-    <link rel="stylesheet" href="<?php tu(); ?>/build/style.css?v=3">
+    <link rel="stylesheet" href="<?php tu(); ?>/build/style.css?v=2">
 </head>
 <body>
