@@ -4,7 +4,7 @@
         <div class="row middle-xs center-xs reverse">
             <section class="col-xs-8 col-sm-6">
                 <figure class="mb2 mb0-sm">
-                    <img src="<?php tu(); ?>/assets/images/prestacao.svg">
+                    <img src="<?php tu(); ?>/assets/images/prestacao.svg?v=20231004">
                 </figure>
             </section>
             <section class="col-xs-12 col-sm-6 tl">

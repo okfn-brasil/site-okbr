@@ -10,7 +10,7 @@ get_header(); ?>
     <article class="container-fluid hero pt7 pt10-sm pb5 pb5-sm">
         <div class="wrap">
             <div class="row">
-                <div class="col-xs-12 col-sm-10 col-md-9">
+                <div class="col-xs-12  col-md-9">
                     <h1 class="t6 w100 ff2  ">Publicações que</h1>
                     <h1 class="t6 w600 ff2 tcv ">democratizam o</h1>
                     <h1 class="t6 w600 ff2 tcv ">conhecimento</h1>
@@ -34,19 +34,20 @@ get_header(); ?>
             <section class="row center-xs mb3">
                 <?php while($noticias->have_posts()): $noticias->the_post(); ?>
                 <!-- Notícia -->
-                <article class="col-xs-12 col-sm-10 col-md-10 mb2 mb1-md">
+                <article class="col-xs-12 col-md-10 mb2 mb1-md">
                     
-                        <div class="cartao-publicacao ">
-                            <div class="img">
+                        <div class="cartao-publicacao">
+                            <div class="img" class="flex">
                                 <?php 
                                     $img = get_field('imagem');
-                                    $img = $img ? isset($img['sizes']['thumb']) ? $img['sizes']['thumb'] : $img['url'] :  tu(0).'/assets/images/thumb.png';
+                                    $img = $img ? isset($img['sizes']['thumb']) ? $img['sizes']['full'] : $img['url'] :  tu(0).'/assets/images/thumb.png';
                                 ?>
-                                <figure><img src="<?php echo $img; ?>"></figure>
+                                <figure><img src="<?php echo $img; ?>" ></figure>
                             </div>
                         
+
                             <div class="interna ">
-                                <div class="t3 ff2 lh1-50 w600 mb05"><?php the_title(); ?></div>
+                                <div class="t4 ff2 lh1-50 w700 mb05"><?php the_title(); ?></div>
                                 <p class="mb05"><?php the_field('descricao'); ?></p>
 
                                 <?php if( have_rows('itens') ): ?>
@@ -84,7 +85,7 @@ get_header(); ?>
                 if($c > $ppp):
             ?>
             <section class="row center-xs">
-                <div class="col-xs-12 col-sm-10 col-md-8">
+                <div class="col-xs-12  col-md-8">
                     <ul class="lista-horizontal">
                         <?php if($pg > 1): ?><li><a href="<?php echo $ptal.'?paged='.($pg-1); ?>"><button class="btn-txt invertido mr2-sm p05">Voltar</button></a></li><?php endif; ?>
                         <?php if($pg-3 > 1): ?>

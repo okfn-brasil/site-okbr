@@ -12,12 +12,12 @@
     <nav class="container-fluid pt05 pb05">
         <div class="wrap">
             <div class="row middle-xs">
-                <div class="col-xs-9 col-sm-10 col-md-4">
+                <div class="col-xs-9  col-md-3">
                     <a href="<?php echo home_url(); ?>" class="inline-block">
-                        <img src="<?php tu(); ?>/assets/images/logo.svg" alt="">
+                        <img src="<?php tu(); ?>/assets/images/logo.svg?v=20231004" alt="">
                     </a>
                 </div>
-                <div class="col-xs-3 col-sm-2 col-md-8 tr">
+                <div class="col-xs-3 col-sm-2 col-md-9 tr">
                     <div class="invisible-md">
                         <a class="btn-menu">
                             <span></span>
@@ -56,7 +56,7 @@
             <div class="row middle-xs between-xs">
                 <div class="col-xs-12 col-sm-4 col-md-4">
                     <a href="<?php echo home_url("sobre"); ?>">
-                        <img src="<?php tu(); ?>/assets/images/logo.svg" alt="">
+                        <img src="<?php tu(); ?>/assets/images/logo.svg?v=20231004" alt="">
                     </a>
                 </div>
                 <div class="col-xs-12 col-sm-8 col-md-6 mt2 mb2 mt0-sm mb0-sm">

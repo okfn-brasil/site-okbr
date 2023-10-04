@@ -42,7 +42,7 @@
             <article class="container-fluid hero pt7 pt10-sm pb5 pb10-sm">
                 <div class="wrap">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-10 col-md-9">
+                        <div class="col-xs-12  col-md-9">
                             <h2 class="t6 w100 ff2  mb2">Siga a <span class="tcv w700">OKBR</span></h2>
                         </div>
                     </div>
@@ -65,17 +65,23 @@
                     </div>
                     <div class="row center-xs mb3 tcp">
                     <?php while(have_rows('redes')): the_row(); ?>
-                    <article class="col-xs-12 col-sm-10 col-md-8 mb2 mb1-md" data-categoria="inovacao">
+                    <article class="col-xs-12 col-sm-12 col-md-8 mb2 mb1-md" data-categoria="inovacao">
                         <div class="cartao cartao-horizontal tl" style="display: flex; align-items: center;">
                             <?php 
                                 $img = get_sub_field('imagem');
                                 $img = $img ? isset($img['sizes']['thumb']) ? $img['sizes']['thumb'] : $img['url'] :  tu(0).'/assets/images/ph_thumb.png';
+                                $link_principal = get_sub_field('link_principal');
                             ?>
-                            <figure><img src="<?php echo $img; ?>"></figure>
+                            <figure>
+                                <?php if($link_principal): ?><a href="<?php echo $link_principal; ?>"><?php endif; ?>
+                                    <img src="<?php echo $img; ?>">
+                                <?php if($link_principal): ?></a><?php endif; ?>
+                            </figure>
                             <section class="p1 pt2 pb0 ">
-                                <div  class="t1 w600 ff3 uc ls1-5 tcv mb0" >RECEBA A NEWSLETTER</div>
-                                <div  class="t1 w600 ff3 uc ls1-5 tcv mb0 mb1" >DE <?php the_sub_field('titulo'); ?></div>
-                                <p><?php the_sub_field('descricao'); ?></p>
+                                <?php if($link_principal): ?><a href="<?php echo $link_principal; ?>"><?php endif; ?>
+                                    <div  class="t1 w600 ff3 uc ls1-5 tcv mb0 mb1" > <?php the_sub_field('titulo'); ?></div>
+                                    <p><?php the_sub_field('descricao'); ?></p>
+                                <?php if($link_principal): ?></a><?php endif; ?>
                                 <?php if( have_rows('redes_sociais') ): ?>
                                     <ul class="flex">
                                         <?php while ( have_rows('redes_sociais') ) : the_row(); ?>

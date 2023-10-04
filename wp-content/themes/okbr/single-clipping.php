@@ -8,7 +8,7 @@
                     <div class="col-xs-12 center-xs">
                         <h2 class="t3 w600 ff3 uc  mb2"><?php the_field('midia'); ?></h2>
                         <h1 class="t6 w100 ff2  mb2"><?php the_title(); ?></h1>
-                        <p class="t3 w100 ff2 uc "><?php the_field('data'); ?></p>
+                        <p class="t3 w300 ff2 uc "><?php the_field('data'); ?></p>
                     </div>
                 </div>
                 <div class="row">

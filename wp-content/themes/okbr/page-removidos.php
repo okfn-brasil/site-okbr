@@ -37,7 +37,7 @@
                         ?>
                         <figure><img src="<?php echo $img; ?>"></figure>
                         <section class=" p2">
-                            <div class="t1 ff2 uc w100 mb05">
+                            <div class="t1 ff2 uc w300 mb05">
                                 <p><?php the_field('data'); ?></p>
                             </div>
                             <div class="t3 ff2 lh1-50 w600">
@@ -66,7 +66,7 @@
                         ?>
                         <figure><img src="<?php echo $img; ?>"></figure>
                         <section class=" p2">
-                            <div class="t1 ff2 uc w100 mb05">
+                            <div class="t1 ff2 uc w300 mb05">
                                 <p><?php the_field('data'); ?></p>
                             </div>
                             <div class="t3 ff2 lh1-50 w600">
@@ -81,7 +81,7 @@
             <?php endif; ?>
 
             <section class="row center-xs">
-                <div class="col-xs-12 col-sm-10 col-md-8">
+                <div class="col-xs-12  col-md-8">
                     <a href="<?php echo home_url("eventos"); ?>">
                         <button class="btn-txt">Histórico</button>
                     </a>
