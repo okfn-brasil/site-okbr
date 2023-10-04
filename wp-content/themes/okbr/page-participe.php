@@ -19,7 +19,7 @@
                     </div>
                     <div class="col-xs-8 col-md-5">
                         <figure class="img-deslocada esquerda">
-                            <img src="<?php tu(); ?>/assets/images/participe.svg">
+                            <img src="<?php tu(); ?>/assets/images/participe.svg?v=20231004">
                         </figure>
                     </div>
                 </div>

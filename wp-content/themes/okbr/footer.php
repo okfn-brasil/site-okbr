@@ -4,7 +4,7 @@
             <div class="row center-xs start-sm middle-xs top-md">
                 <div class="col-xs-6 col-md-3 tc tl-sm mb3 mb0-md">
                     <a href="<?php echo home_url(); ?>">
-                        <img src="<?php tu(); ?>/assets/images/logo-vertical.svg" alt="">
+                        <img src="<?php tu(); ?>/assets/images/logo-vertical.svg?v=20231004" alt="">
                     </a>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3 mb3 mb0-md">

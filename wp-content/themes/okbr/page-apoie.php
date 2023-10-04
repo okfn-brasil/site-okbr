@@ -13,7 +13,7 @@
                         </div>
                         <div class="col-xs-8 col-sm-5 col-sm-offset-1 ">
                             <figure class="img-deslocada esquerda">
-                                <img src="<?php tu(); ?>/assets/images/apoie.svg">
+                                <img src="<?php tu(); ?>/assets/images/apoie.svg?v=20231004">
                             </figure>
                         </div>
                     </div>
