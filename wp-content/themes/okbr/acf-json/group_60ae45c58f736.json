@@ -78,7 +78,7 @@
                 "id": ""
             },
             "display_format": "d\/m\/Y",
-            "return_format": "d M \\d\\e Y",
+            "return_format": "d M de Y",
             "first_day": 1
         }
     ],

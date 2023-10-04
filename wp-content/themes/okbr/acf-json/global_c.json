@@ -1,0 +1,84 @@
+{
+    "key": "global_c",
+    "title": "Redes Sociais",
+    "fields": [
+        {
+            "key": "global_c_sociais_c_l",
+            "label": "Redes Sociais",
+            "name": "redes_sociais",
+            "type": "repeater",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "min": 1,
+            "max": 0,
+            "button_label": "",
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "global_c_sociais_r_i",
+                    "label": "Icone",
+                    "name": "icon",
+                    "type": "image",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "20%",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "thumb",
+                    "min_width": 20,
+                    "min_height": 20,
+                    "library": "all",
+                    "min_size": 0,
+                    "max_width": 0,
+                    "max_height": 0,
+                    "max_size": 0,
+                    "mime_types": ""
+                },
+                {
+                    "key": "global_c_sociais_c_l_tt",
+                    "label": "Link",
+                    "name": "link",
+                    "type": "link",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "80%",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "links-gerais"
+            }
+        ]
+    ],
+    "menu_order": 1,
+    "position": "normal",
+    "style": "seamless",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [],
+    "active": true,
+    "description": "",
+    "modified": 1696444957
+}
