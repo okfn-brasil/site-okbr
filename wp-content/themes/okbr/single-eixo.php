@@ -11,10 +11,10 @@
     <header class="container-fluid  hero-eixo bg-imagem pt10 pb10">
         <div class="wrap">
             <div class="row">
-                <div class="col-xs-12 col-sm-10 col-md-12 flex">
+                <div class="col-xs-12 col-sm-10 col-md-12 flex eixo-fixed">
                     <div class="bannermobile" style="background-image: url(<?php echo $img; ?>)"></div>
-                    <h2 class="t6 w100 ff2  mb2"><?php md_field('titulo'); ?></h2>
-                    <img class="" src="<?php echo $img; ?>">
+                    <h2 class="t6 w100 ff2"><?php md_field('titulo'); ?></h2>
+                    <img class="bannerdesktop" src="<?php echo $img; ?>">
                 </div>
             </div>
         </div>

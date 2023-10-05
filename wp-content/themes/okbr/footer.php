@@ -4,7 +4,7 @@
             <div class="row center-xs start-sm middle-xs top-md">
                 <div class="col-xs-6 col-md-3 tc tl-sm mb3 mb0-md">
                     <a href="<?php echo home_url(); ?>">
-                        <img src="<?php tu(); ?>/assets/images/logo-vertical.svg?v=20231004" alt="">
+                        <img src="<?php tu(); ?>/assets/images/logo-vertical.svg" alt="">
                     </a>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3 mb3 mb0-md">
@@ -88,7 +88,7 @@
         </div>
     </footer>
 <?php wp_footer(); ?>
-<script src="<?php tu(); ?>/build/script.js?v=202310041938"></script>
+<script src="<?php tu(); ?>/build/script.js?v=202310042212"></script>
 <?php global $alerta; if($alerta): ?>
 <script type="text/javascript">alerta('<?php echo $alerta->status; ?>','<?php echo $alerta->msg; ?>');</script>
 <?php endif; ?>
