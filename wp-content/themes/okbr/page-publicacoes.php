@@ -10,7 +10,7 @@ get_header(); ?>
     <article class="container-fluid hero pt7 pt10-sm pb5 pb5-sm">
         <div class="wrap">
             <div class="row">
-                <div class="col-xs-12 col-sm-10 col-md-9">
+                <div class="col-xs-12  col-md-9">
                     <h1 class="t6 w100 ff2  ">Publicações que</h1>
                     <h1 class="t6 w600 ff2 tcv ">democratizam o</h1>
                     <h1 class="t6 w600 ff2 tcv ">conhecimento</h1>
@@ -34,7 +34,7 @@ get_header(); ?>
             <section class="row center-xs mb3">
                 <?php while($noticias->have_posts()): $noticias->the_post(); ?>
                 <!-- Notícia -->
-                <article class="col-xs-12 col-sm-10 col-md-10 mb2 mb1-md">
+                <article class="col-xs-12  col-md-10 mb2 mb1-md">
                     
                         <div class="cartao-publicacao ">
                             <div class="img">
@@ -85,7 +85,7 @@ get_header(); ?>
                 if($c > $ppp):
             ?>
             <section class="row center-xs">
-                <div class="col-xs-12 col-sm-10 col-md-8">
+                <div class="col-xs-12  col-md-8">
                     <ul class="lista-horizontal">
                         <?php if($pg > 1): ?><li><a href="<?php echo $ptal.'?paged='.($pg-1); ?>"><button class="btn-txt invertido mr2-sm p05">Voltar</button></a></li><?php endif; ?>
                         <?php if($pg-3 > 1): ?>

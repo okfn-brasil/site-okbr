@@ -4,7 +4,7 @@
         <article class="container-fluid hero pt7 pt10-sm pb5 pb10-sm">
             <div class="wrap">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-10 col-md-9">
+                    <div class="col-xs-12  col-md-9">
                         <h1 class="t6 w100 ff2  mb3"><?php md_field('titulo'); ?></h1>
                     </div>
                 </div>

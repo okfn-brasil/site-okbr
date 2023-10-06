@@ -81,7 +81,7 @@
             <?php endif; ?>
 
             <section class="row center-xs">
-                <div class="col-xs-12 col-sm-10 col-md-8">
+                <div class="col-xs-12  col-md-8">
                     <a href="<?php echo home_url("eventos"); ?>">
                         <button class="btn-txt">Histórico</button>
                     </a>

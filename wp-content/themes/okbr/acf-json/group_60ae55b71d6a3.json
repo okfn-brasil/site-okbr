@@ -1,0 +1,48 @@
+{
+    "key": "group_60ae55b71d6a3",
+    "title": "Noticias",
+    "fields": [
+        {
+            "key": "noticias_c_de",
+            "label": "Destaques",
+            "name": "destaque",
+            "type": "post_object",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "noticia",
+                "evento",
+                "clipping"
+            ],
+            "return_format": "id",
+            "multiple": 1,
+            "taxonomy": [],
+            "allow_null": 0,
+            "ui": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "24"
+            }
+        ]
+    ],
+    "menu_order": 1,
+    "position": "normal",
+    "style": "seamless",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "modified": 1696599174
+}

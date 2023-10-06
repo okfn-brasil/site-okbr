@@ -12,7 +12,7 @@
     <nav class="container-fluid pt05 pb05">
         <div class="wrap">
             <div class="row middle-xs">
-                <div class="col-xs-9 col-sm-10 col-md-3">
+                <div class="col-xs-9  col-md-3">
                     <a href="<?php echo home_url(); ?>" class="inline-block">
                         <img src="<?php tu(); ?>/assets/images/logo.svg?v=20231004" alt="">
                     </a>

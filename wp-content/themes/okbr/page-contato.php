@@ -42,7 +42,7 @@
             <article class="container-fluid hero pt7 pt10-sm pb5 pb10-sm">
                 <div class="wrap">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-10 col-md-9">
+                        <div class="col-xs-12  col-md-9">
                             <h2 class="t6 w100 ff2  mb2">Siga a <span class="tcv w700">OKBR</span></h2>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="row center-xs mb3 tcp">
                     <?php while(have_rows('redes')): the_row(); ?>
-                    <article class="col-xs-12 col-sm-10 col-md-8 mb2 mb1-md" data-categoria="inovacao">
+                    <article class="col-xs-12 col-sm-12 col-md-8 mb2 mb1-md" data-categoria="inovacao">
                         <div class="cartao cartao-horizontal tl" style="display: flex; align-items: center;">
                             <?php 
                                 $img = get_sub_field('imagem');

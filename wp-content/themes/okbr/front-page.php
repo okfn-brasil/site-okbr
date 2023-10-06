@@ -33,7 +33,7 @@
                                         
                                         </div>
                                     <?php else: ?>
-                                        <div class="col-xs-12 col-sm-10 col-md-8">
+                                        <div class="col-xs-12  col-md-8">
                                             <?php if($link): ?><a href="<?php echo $link['url']; ?>" target="<?php echo $link['target']; ?>"><?php endif; ?>
                                                 <h2 class="t6 lh1-25 ff2  w100 mb2"><?php echo animaTermos($texto); ?></h2>
                                             <?php if($link): ?></a><?php endif; ?>
@@ -115,25 +115,7 @@
                     $noticias = new WP_Query(array("post_type"=>"noticia","posts_per_page"=>3));
                     while($noticias->have_posts()): $noticias->the_post();
                 ?>
-                <!-- Notícia -->
-                <article class="col-xs-12 col-sm-10 col-md-8 mb1">
-                    <a href="<?php the_permalink(); ?>" class="cartao cartao-horizontal middle-xs">
-                        <?php 
-                            $img = get_field('imagem');
-                            $img = $img ? isset($img['sizes']['thumbhor']) ? $img['sizes']['thumbhor'] : $img['url'] :  tu(0).'/assets/images/ph_thumbhor.png';
-                        ?>
-                        <figure><img src="<?php echo $img; ?>"></figure>
-                        <section class="pl2 pr2 pb1 pt1 tl">
-                            <div class="t1 ff2 uc w100 mb05">
-                                <p><?php the_date('d M Y'); ?></p>
-                            </div>
-                            <div class="t3 ff2 lh1-50 w600">
-                                <p><?php the_title(); ?></p>
-                            </div>
-                            <button class="btn-txt btn-cartao">Leia Mais</button>
-                        </section>
-                    </a>
-                </article>
+                    <?php get_template_part('block-noticia'); ?>
                 <?php endwhile; wp_reset_postdata(); ?>
             </div>
 
