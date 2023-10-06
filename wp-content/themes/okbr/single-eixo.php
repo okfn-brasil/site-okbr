@@ -8,7 +8,7 @@
         $img = $img ? $img : get_field('imagem');
         $img = $img ? isset($img['sizes']['full']) ? $img['sizes']['full'] : $img['url'] :  tu(0).'/assets/images/ph_full.png';
     ?>
-    <header class="container-fluid  hero-eixo bg-imagem pt10 pb10">
+    <header class="container-fluid  hero-eixo bg-imagem pt10 pb10" style="background-image:url(<?php the_field('bg_banner'); ?>);">
         <div class="wrap">
             <div class="row">
                 <div class="col-xs-12  col-md-12 flex eixo-fixed">

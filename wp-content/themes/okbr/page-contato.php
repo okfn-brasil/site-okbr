@@ -73,8 +73,7 @@
                             ?>
                             <figure><img src="<?php echo $img; ?>"></figure>
                             <section class="p1 pt2 pb0 ">
-                                <div  class="t1 w600 ff3 uc ls1-5 tcv mb0" >RECEBA A NEWSLETTER</div>
-                                <div  class="t1 w600 ff3 uc ls1-5 tcv mb0 mb1" >DE <?php the_sub_field('titulo'); ?></div>
+                                <div  class="t1 w600 ff3 uc ls1-5 tcv mb0 mb1" > <?php the_sub_field('titulo'); ?></div>
                                 <p><?php the_sub_field('descricao'); ?></p>
                                 <?php if( have_rows('redes_sociais') ): ?>
                                     <ul class="flex">
