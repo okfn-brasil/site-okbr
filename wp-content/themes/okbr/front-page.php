@@ -82,7 +82,7 @@
                         </figure>
                     </div>
                     <a href="<?php the_permalink(); ?>" class="col-xs-12 col-md-5 z2">
-                        <h3 class="t5 w100 ff2  nowrap mb1 "><?php md_field('titulo'); ?></h3>
+                        <h3 class="teixo w100 ff2  nowrap mb1 "><?php md_field('titulo'); ?></h3>
                         <div class="row">
                             <div class="col-xs-12  ">
                                 <div class="t3 lh1-50  mb1 ">

@@ -77,7 +77,7 @@
                                     $img = $img_ ? isset($img_['sizes']['thumbhor']) ? $img_['sizes']['thumbhor'] : $img_['url'] :  tu(0).'/assets/images/ph_thumbhor.png';
                                 ?>
                                 <figure><img src="<?php echo $img; ?>"></figure>
-                                <section class=" tcb p2 tl">
+                                <section class="p2 tl">
                                     <div class="t1 ff2 uc w100 mb05">
                                         <p><?php the_date('d M Y'); ?></p>
                                     </div>

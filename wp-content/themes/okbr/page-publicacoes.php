@@ -40,13 +40,14 @@ get_header(); ?>
                             <div class="img">
                                 <?php 
                                     $img = get_field('imagem');
-                                    $img = $img ? isset($img['sizes']['thumb']) ? $img['sizes']['thumb'] : $img['url'] :  tu(0).'/assets/images/thumb.png';
+                                    $img = $img ? isset($img['sizes']['thumb']) ? $img['sizes']['full'] : $img['url'] :  tu(0).'/assets/images/thumb.png';
                                 ?>
                                 <figure><img src="<?php echo $img; ?>"></figure>
                             </div>
                         
+
                             <div class="interna ">
-                                <div class="t3 ff2 lh1-50 w600 mb05"><?php the_title(); ?></div>
+                                <div class="t4 ff2 lh1-50 w700 mb05"><?php the_title(); ?></div>
                                 <p class="mb05"><?php the_field('descricao'); ?></p>
 
                                 <?php if( have_rows('itens') ): ?>

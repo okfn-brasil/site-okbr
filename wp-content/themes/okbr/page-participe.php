@@ -10,12 +10,30 @@
                             <?php echo md_text(get_field('descricao',get_the_ID(),false)); ?>
                         </div>
                         <p class="t1 ff2 w400 tcv uc ls1 mb2">Acompanhe nossas redes</p>
-                        <ul class="lista-horizontal mb3 mb0-md">
-                            <li><a href="https://twitter.com/okfnbr"><button class="rede-social twitter mr1"></button></a></li>
-                            <li><a href="https://www.facebook.com/OpenKnowledgeBrasil"><button class="rede-social facebook mr1"></button></a></li>
-                            <li><a href="https://github.com/okfn-brasil"><button class="rede-social github mr1"></button></a></li>
-                            <li><a href=""><button class="rede-social feed mr1"></button></a></li>
-                        </ul>
+                    
+                        <?php if( have_rows('redes_sociais','option') ): ?>
+                                    <ul class="lista-horizontal m0 mb3">
+                                        <?php while ( have_rows('redes_sociais','option')) : the_row(); ?>
+                                            <?php 
+                                            $link = get_sub_field('link');
+                                            $img = get_sub_field('icon');
+                                            $img = $img ? isset($img['sizes']['thumb']) ? $img['sizes']['thumb'] : $img['url'] :  tu(0).'/assets/images/ph_thumb.png';
+
+                                            if( $link ): 
+                                                $link_url = $link['url'];
+                                                $link_title = $link['title'];
+                                                $link_target = $link['target'] ? $link['target'] : '_self';
+                                                ?>
+                                                <li class="mr05 ml05 mb1">
+                                                    <a class="" href="<?php echo esc_url( $link_url ); ?>" target="<?php echo esc_attr( $link_target ); ?>">
+                                                    <figure><img src="<?php echo $img; ?>"></figure>
+                                                    <!-- <?php echo esc_html( $link_title ); ?>-->
+                                                    </a>
+                                                </li>
+                                            <?php endif; ?>
+                                        <?php endwhile; ?>
+                                    </ul>
+                            <?php endif; ?>
                     </div>
                     <div class="col-xs-8 col-md-5">
                         <figure class="img-deslocada esquerda">
