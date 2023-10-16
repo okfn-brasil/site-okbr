@@ -37,12 +37,12 @@ get_header(); ?>
                 <article class="col-xs-12  col-md-10 mb2 mb1-md">
                     
                         <div class="cartao-publicacao ">
-                            <div class="img">
+                            <div class="img" class="flex">
                                 <?php 
                                     $img = get_field('imagem');
                                     $img = $img ? isset($img['sizes']['thumb']) ? $img['sizes']['full'] : $img['url'] :  tu(0).'/assets/images/thumb.png';
                                 ?>
-                                <figure><img src="<?php echo $img; ?>"></figure>
+                                <figure><img src="<?php echo $img; ?>" ></figure>
                             </div>
                         
 

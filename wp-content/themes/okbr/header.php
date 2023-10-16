@@ -14,7 +14,7 @@
     </title>
 	<?php wp_head(); ?>
 	<link rel="icon" type="image/png" href="<?php tu(); ?>/assets/images/icon.png" />
-    <link rel="stylesheet" href="<?php tu(); ?>/build/style.css?v=202310061853">
+    <link rel="stylesheet" href="<?php tu(); ?>/build/style.css?v=20231016">
     <!-- FontGoogle -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
