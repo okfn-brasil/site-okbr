@@ -8,7 +8,7 @@
                     <div class="col-xs-12 center-xs">
                         <h2 class="t3 w600 ff3 uc tcv mb2"><?php if($eixos = get_field('eixos')) echo implode(", ", array_map(function($a){return '<a href="'.get_the_permalink($a).'">'.get_the_title($a).'</a>';}, $eixos)); ?></h2>
                         <h1 class="t6 w100 ff2 tcb mb2"><?php the_title(); ?></h1>
-                        <p class="t3 w100 ff2 uc tcv"><?php echo get_the_date('d M \d\e Y'); ?>, por <?php if($cols = get_field('colaboradores')){ echo implode(", ", array_map(function($a){return '<a class="w600" data-modal="col_'.$a.'">'.get_the_title($a).'</a>';}, $cols)); }else{echo 'OKBR';} ?></p>
+                        <p class="t3 w300 ff2 uc tcv"><?php echo get_the_date('d M \d\e Y'); ?>, por <?php if($cols = get_field('colaboradores')){ echo implode(", ", array_map(function($a){return '<a class="w600" data-modal="col_'.$a.'">'.get_the_title($a).'</a>';}, $cols)); }else{echo 'OKBR';} ?></p>
                     </div>
                 </div>
                 <div class="row">

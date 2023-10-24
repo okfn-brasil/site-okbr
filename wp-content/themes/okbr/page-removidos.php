@@ -37,7 +37,7 @@
                         ?>
                         <figure><img src="<?php echo $img; ?>"></figure>
                         <section class=" p2">
-                            <div class="t1 ff2 uc w100 mb05">
+                            <div class="t1 ff2 uc w300 mb05">
                                 <p><?php the_field('data'); ?></p>
                             </div>
                             <div class="t3 ff2 lh1-50 w600">
@@ -66,7 +66,7 @@
                         ?>
                         <figure><img src="<?php echo $img; ?>"></figure>
                         <section class=" p2">
-                            <div class="t1 ff2 uc w100 mb05">
+                            <div class="t1 ff2 uc w300 mb05">
                                 <p><?php the_field('data'); ?></p>
                             </div>
                             <div class="t3 ff2 lh1-50 w600">

@@ -34,9 +34,9 @@ get_header(); ?>
             <section class="row center-xs mb3">
                 <?php while($noticias->have_posts()): $noticias->the_post(); ?>
                 <!-- Notícia -->
-                <article class="col-xs-12  col-md-10 mb2 mb1-md">
+                <article class="col-xs-12 col-md-10 mb2 mb1-md">
                     
-                        <div class="cartao-publicacao ">
+                        <div class="cartao-publicacao">
                             <div class="img" class="flex">
                                 <?php 
                                     $img = get_field('imagem');

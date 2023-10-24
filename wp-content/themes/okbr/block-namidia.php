@@ -7,7 +7,7 @@
         ?>
         <figure><img src="<?php echo $img; ?>"></figure>
         <section class="p2 pt1 tl">
-            <p class="t1 ff2 uc w100 mb05"><?php the_field('midia'); ?> - <?php the_field('data'); ?></p>
+            <p class="t1 ff2 uc w300 mb05"><?php the_field('midia'); ?> - <?php the_field('data'); ?></p>
             <h3 class="t3 ff2 lh1-50 w600 mb0"><?php the_title(); ?></h3>
             <button class="btn-txt btn-cartao">Ir para o site</button>
         </section>

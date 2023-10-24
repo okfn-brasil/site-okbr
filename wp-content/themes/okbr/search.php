@@ -37,7 +37,7 @@ get_header();
                         <?php elseif(get_post_type() == 'page'): ?>
                             <article class="mb2 bg-verde p1">
                                 <a href="<?php echo the_permalink(); ?>">
-                                    <p class=" t1 ff2 uc w100 mb05">Página</p>
+                                    <p class=" t1 ff2 uc w300 mb05">Página</p>
                                     <div class="t4  w400"><b><?php the_title(); ?></b></div>
                                 </a>
                             </article>

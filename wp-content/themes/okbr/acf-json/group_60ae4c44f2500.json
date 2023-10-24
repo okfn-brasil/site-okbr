@@ -180,6 +180,22 @@
                     "placeholder": ""
                 },
                 {
+                    "key": "field_653851daf0852",
+                    "label": "Link principal",
+                    "name": "link_principal",
+                    "type": "url",
+                    "instructions": "Clique no titulo, texto e imagem",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "100%",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": ""
+                },
+                {
                     "key": "contato_c_sociais_c_l",
                     "label": "Redes Sociais",
                     "name": "redes_sociais",

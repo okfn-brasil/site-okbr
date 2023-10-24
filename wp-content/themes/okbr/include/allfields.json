@@ -282,7 +282,7 @@
                     "id": ""
                 },
                 "display_format": "d\/m\/Y",
-                "return_format": "d M \\d\\e Y",
+                "return_format": "d M de Y",
                 "first_day": 1
             }
         ],
@@ -789,6 +789,22 @@
                         "placeholder": ""
                     },
                     {
+                        "key": "field_653851daf0852",
+                        "label": "Link principal",
+                        "name": "link_principal",
+                        "type": "url",
+                        "instructions": "Clique no titulo, texto e imagem",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "100",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "placeholder": ""
+                    },
+                    {
                         "key": "contato_c_sociais_c_l",
                         "label": "Redes Sociais",
                         "name": "redes_sociais",
@@ -1000,7 +1016,8 @@
         "instruction_placement": "label",
         "hide_on_screen": "",
         "active": true,
-        "description": ""
+        "description": "",
+        "modified": 1696599174
     },
     {
         "key": "group_60ae4f831ae8a",
