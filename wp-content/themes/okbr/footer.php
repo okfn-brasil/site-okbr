@@ -88,7 +88,7 @@
         </div>
     </footer>
 <?php wp_footer(); ?>
-<script src="<?php tu(); ?>/build/script.js?v=20231016"></script>
+<script src="<?php tu(); ?>/build/script.js?v=20231101"></script>
 <?php global $alerta; if($alerta): ?>
 <script type="text/javascript">alerta('<?php echo $alerta->status; ?>','<?php echo $alerta->msg; ?>');</script>
 <?php endif; ?>
