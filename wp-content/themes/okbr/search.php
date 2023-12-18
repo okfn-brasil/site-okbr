@@ -1,6 +1,6 @@
 <?php 
 global $wp_query;
-get_header(); 
+get_header();
 ?>
 <?php get_template_part('block-menu'); ?>
     <main>
@@ -17,7 +17,7 @@ get_header();
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-md-8 col-md-offset-4">
-                        <p class="t4 w400 ">Sua busca por "<strong><?php echo $_GET['s']; ?></strong>" retornou <?php echo $wp_query->found_posts; ?> resultados</p>
+                        <p class="t4 w400 ">Sua busca por "<strong><?php echo stripslashes($_GET['s']); ?></strong>" retornou <?php echo $wp_query->found_posts; ?> resultados</p>
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@ get_header();
                     $ppp = get_option( 'posts_per_page' );
                     $pg = get_query_var('paged');
                     if(get_query_var('paged'))unset($wp->query_vars['paged']);
-                    $ptal = add_query_arg( $wp->query_vars, home_url() );
+                    $ptal = stripslashes(add_query_arg( $wp->query_vars, home_url() ));
                     $pg = $pg ? $pg : 1;
                     $c = $wp_query->found_posts;
                     $max = ceil($c/$ppp);
@@ -78,19 +78,19 @@ get_header();
                 <section class="row center-xs">
                     <div class="col-xs-12 col-sm-12 col-md-8">
                         <ul class="lista-horizontal">
-                            <?php if($pg > 1): ?><li><a href="<?php echo $ptal.'&paged='.($pg-1); ?>"><button class="btn-txt invertido mr2-sm p05">Voltar</button></a></li><?php endif; ?>
+                            <?php if($pg > 1): ?><li><a href="<?php echo htmlspecialchars($ptal, ENT_QUOTES) . '&paged=' . ($pg - 1); ?>"><button class="btn-txt invertido mr2-sm p05">Voltar</button></a></li><?php endif; ?>
                             <?php if($pg-3 > 1): ?>
-                                <li><a href="<?php echo $ptal.'&paged='.(1); ?>"><button class="btn-txt semSeta p05 <?php if(1 == $pg) echo 'ativo'; ?>">Primeira</button></a></li>
+                                <li><a href="<?php echo htmlspecialchars($ptal, ENT_QUOTES) .'&paged='.(1); ?>"><button class="btn-txt semSeta p05 <?php if(1 == $pg) echo 'ativo'; ?>">Primeira</button></a></li>
                                 <li><span class="p05 ">...</span></li>
                             <?php endif; ?>
                             <?php for ($i = max(1,$pg-3); $i <= min($max,$pg+3); $i++): ?>
-                            <li><a href="<?php echo $ptal.'&paged='.($i); ?>"><button class="btn-txt semSeta p05 <?php if($i == $pg) echo 'ativo'; ?>"><?php echo $i; ?></button></a></li>
+                            <li><a href="<?php echo htmlspecialchars($ptal, ENT_QUOTES) .'&paged='.($i); ?>"><button class="btn-txt semSeta p05 <?php if($i == $pg) echo 'ativo'; ?>"><?php echo $i; ?></button></a></li>
                             <?php endfor; ?>
                             <?php if($pg+3 < $max): ?>
                                 <li><span class="p05 ">...</span></li>
-                                <li><a href="<?php echo $ptal.'&paged='.($max); ?>"><button class="btn-txt semSeta p05 <?php if($max == $pg) echo 'ativo'; ?>">Última</button></a></li>
+                                <li><a href="<?php echo htmlspecialchars($ptal, ENT_QUOTES) .'&paged='.($max); ?>"><button class="btn-txt semSeta p05 <?php if($max == $pg) echo 'ativo'; ?>">Última</button></a></li>
                             <?php endif; ?>
-                            <?php if($pg < $max): ?><li><a href="<?php echo $ptal.'&paged='.($pg+1); ?>"><button class="btn-txt ml2-sm p05">Proxima</button></a></li><?php endif; ?>
+                            <?php if($pg < $max): ?><li><a href="<?php echo htmlspecialchars($ptal, ENT_QUOTES) .'&paged='.($pg+1); ?>"><button class="btn-txt ml2-sm p05">Proxima</button></a></li><?php endif; ?>
                         </ul>
                     </div>
                 </section>
