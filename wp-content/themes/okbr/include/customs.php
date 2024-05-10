@@ -60,7 +60,8 @@
 			"query_var" => true,
 			"menu_position" => 1,		
 			"supports" => array("title", "thumbnail"),
-			"taxonomies" => array("post_tag")
+			"taxonomies" => array("post_tag"),
+			'show_in_rest' => true
 		));
 		register_post_type( "projeto", array(
 			"labels" => array(
