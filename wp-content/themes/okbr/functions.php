@@ -398,3 +398,11 @@ date_default_timezone_set('America/Sao_Paulo');
 	}
 	
 	add_action( 'rest_api_init', 'create_ACF_meta_in_REST' );
+
+	function custom_rss_feed($query) {
+	    if ($query->is_feed() && !is_admin()) {
+	        $query->set('post_type', array('noticia', 'evento'));
+	    }
+	    return $query;
+	}
+	add_filter('pre_get_posts', 'custom_rss_feed');
