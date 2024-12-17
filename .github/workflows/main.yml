@@ -30,5 +30,5 @@ jobs:
         script: |
           cd ${{vars.THEMEPATHPROD}}
           git checkout main
-          wp theme activate site-america-aberta --allow-root
+          wp theme activate site --allow-root
           wp nginx-helper purge-all --allow-root
