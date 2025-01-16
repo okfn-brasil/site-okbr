@@ -1,7 +1,7 @@
-name: Deploy Main
+name: Deploy Dev
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -9,7 +9,7 @@ jobs:
     - uses: actions/checkout@v4  
     - name: Sync
       env:
-        dest: '${{vars.USER}}@${{vars.HOST}}:${{vars.THEMEPATHPROD}}'
+        dest: '${{vars.USER}}@${{vars.HOST}}:${{vars.THEMEPATHDEV}}'
       run: |
         echo "${{secrets.DEPLOY_KEY}}" > deploy_key
         chmod 600 ./deploy_key
@@ -28,6 +28,6 @@ jobs:
         username: ${{vars.USER}}
         key: ${{secrets.DEPLOY_KEY}}
         script: |
-          cd ${{vars.THEMEPATHPROD}}
-          git checkout main
+          cd ${{vars.THEMEPATHDEV}}
+          git checkout dev
           docker exec dev-site-okbr-wpcli-1 wp theme activate site-okbr
