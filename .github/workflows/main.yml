@@ -1,0 +1,33 @@
+name: Deploy Main
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4  
+    - name: Sync
+      env:
+        dest: '${{vars.USER}}@${{vars.HOST}}:${{vars.THEMEPATHPROD}}'
+      run: |
+        echo "${{secrets.DEPLOY_KEY}}" > deploy_key
+        chmod 600 ./deploy_key
+        rsync -chav --delete \
+          -e 'ssh -i ./deploy_key -o StrictHostKeyChecking=no' \
+          --exclude /deploy_key \
+          --exclude /.git/ \
+          --exclude /.github/ \
+          --exclude /node_modules/ \
+          ./ ${{env.dest}}
+      
+    - name: SSH Remote Commands
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{vars.HOST}}
+        username: ${{vars.USER}}
+        key: ${{secrets.DEPLOY_KEY}}
+        script: |
+          cd ${{vars.THEMEPATHPROD}}
+          git checkout main
+          docker exec dev-site-okbr-wpcli-1 wp theme activate site-okbr
