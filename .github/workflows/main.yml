@@ -16,8 +16,8 @@ jobs:
         rsync -chav --delete \
           -e 'ssh -i ./deploy_key -o StrictHostKeyChecking=no' \
           --exclude /deploy_key \
-          --exclude /.git/ \
-          --exclude /.github/ \
+          # --exclude /.git/ \
+          # --exclude /.github/ \
           --exclude /node_modules/ \
           ./ ${{env.dest}}
       
@@ -30,4 +30,4 @@ jobs:
         script: |
           cd ${{vars.THEMEPATHPROD}}
           git checkout main
-          docker exec dev-site-okbr-wpcli-1 wp theme activate site-okbr
+          docker exec okbr-wp-prod-wpcli-1 wp theme activate site-okbr
