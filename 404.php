@@ -11,8 +11,8 @@
                             <div class="p05">
                                 <div class="row middle-xs">
                                     <div class="col-xs-12 col-md-7">
-                                        <p class="t6 w100 ff2 tcb mb1">Erro 404!</p>
-                                        <p class="t4 w100 ff2 tcb mb2">Desculpe, não encontramos essa página.</p>
+                                        <p class="t5 w100 ff2">Erro 404!</p>
+                                        <p class="t5 w100 ff2">Desculpe, não encontramos essa página.</p>
                                         <a href="<?php echo home_url(); ?>"><button class="btn-txt">Voltar para a home</button></a>
                                     </div>
                                 </div>
