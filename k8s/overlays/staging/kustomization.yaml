@@ -82,10 +82,10 @@ patches:
   # ── Recursos menores para staging ─────────────────────────────────────────
   - patch: |-
       - op: replace
-        path: /spec/resources/requests/memory
+        path: /spec/template/spec/containers/0/resources/requests/memory
         value: "128Mi"
       - op: replace
-        path: /spec/resources/limits/memory
+        path: /spec/template/spec/containers/0/resources/limits/memory
         value: "256Mi"
     target:
       kind: StatefulSet
