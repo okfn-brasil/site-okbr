@@ -46,13 +46,3 @@ patches:
       kind: Namespace
       name: openknowledge
 
-  # ── Secret: não aplicar (gerenciado manualmente via kubectl) ───────────────
-  - patch: |-
-      $patch: delete
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: wordpress-secret
-    target:
-      kind: Secret
-      name: wordpress-secret

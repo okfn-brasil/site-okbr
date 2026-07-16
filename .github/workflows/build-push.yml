@@ -82,6 +82,18 @@ jobs:
           echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
 
+      - name: Deploy staging
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+        run: |
+          find k8s/overlays/staging/ -name "*.yaml" | \
+            xargs sed -i "s|<STAGING_DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
+
+          (cd k8s/overlays/staging && kustomize edit set image ghcr.io/okfn-brasil/site-okbr="${IMAGE_TAG}")
+
+          kubectl apply -k k8s/overlays/staging/
+
       - name: Create/update Kubernetes secret
         env:
           WP_DOMAIN: ${{ vars.WP_DOMAIN }}
@@ -90,7 +102,8 @@ jobs:
           MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
           WORDPRESS_AUTH_SALTS: ${{ secrets.WORDPRESS_AUTH_SALTS }}
         run: |
-          # O namePrefix staging- faz o secret se chamar staging-wordpress-secret
+          # Sobrescreve o placeholder criado pelo kustomize com os valores reais.
+          # O namePrefix staging- faz o secret se chamar staging-wordpress-secret.
           kubectl create secret generic staging-wordpress-secret \
             -n openknowledge \
             --from-literal=WORDPRESS_DB_USER="${DB_USER}" \
@@ -103,18 +116,6 @@ jobs:
           define('WP_MEMORY_LIMIT', '128M');
           define('FORCE_SSL_ADMIN', true);" \
             --dry-run=client -o yaml | kubectl apply -f -
-
-      - name: Deploy staging
-        env:
-          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
-          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
-        run: |
-          find k8s/overlays/staging/ -name "*.yaml" | \
-            xargs sed -i "s|<STAGING_DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
-
-          (cd k8s/overlays/staging && kustomize edit set image ghcr.io/okfn-brasil/site-okbr="${IMAGE_TAG}")
-
-          kubectl apply -k k8s/overlays/staging/
 
       - name: Wait for rollout
         run: |
@@ -177,6 +178,18 @@ jobs:
           echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
 
+      - name: Deploy production
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+        run: |
+          find k8s/overlays/production/ -name "*.yaml" | \
+            xargs sed -i "s|<DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
+
+          (cd k8s/overlays/production && kustomize edit set image ghcr.io/okfn-brasil/site-okbr="${IMAGE_TAG}")
+
+          kubectl apply -k k8s/overlays/production/
+
       - name: Create/update Kubernetes secret
         env:
           WP_DOMAIN: ${{ vars.WP_DOMAIN }}
@@ -185,6 +198,7 @@ jobs:
           MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
           WORDPRESS_AUTH_SALTS: ${{ secrets.WORDPRESS_AUTH_SALTS }}
         run: |
+          # Sobrescreve o placeholder criado pelo kustomize com os valores reais.
           kubectl create secret generic wordpress-secret \
             -n openknowledge \
             --from-literal=WORDPRESS_DB_USER="${DB_USER}" \
@@ -197,18 +211,6 @@ jobs:
           define('WP_MEMORY_LIMIT', '256M');
           define('FORCE_SSL_ADMIN', true);" \
             --dry-run=client -o yaml | kubectl apply -f -
-
-      - name: Deploy production
-        env:
-          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
-          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
-        run: |
-          find k8s/overlays/production/ -name "*.yaml" | \
-            xargs sed -i "s|<DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
-
-          (cd k8s/overlays/production && kustomize edit set image ghcr.io/okfn-brasil/site-okbr="${IMAGE_TAG}")
-
-          kubectl apply -k k8s/overlays/production/
 
       - name: Wait for rollout
         run: |

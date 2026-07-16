@@ -68,17 +68,6 @@ patches:
       kind: Namespace
       name: openknowledge
 
-  # ── Secret: staging precisa do próprio secret (staging-wordpress-secret) ──
-  - patch: |-
-      $patch: delete
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: wordpress-secret
-    target:
-      kind: Secret
-      name: wordpress-secret
-
   # ── Recursos menores para staging ─────────────────────────────────────────
   - patch: |-
       - op: replace
