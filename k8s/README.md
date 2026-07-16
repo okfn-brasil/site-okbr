@@ -136,8 +136,29 @@ PR fechada → staging-cleanup
 
 ### Secrets e variáveis do GitHub
 
-Configure nos ambientes **staging** e **production** em
-`Settings → Environments` do repositório:
+Use o script de setup para configurar tudo de uma vez (interativo ou
+não-interativo):
+
+```bash
+# Interativo — ambos os ambientes
+./scripts/setup-github-environments.sh
+
+# Só um ambiente
+./scripts/setup-github-environments.sh --env staging
+./scripts/setup-github-environments.sh --env production
+
+# Não-interativo (ex: CI de bootstrap)
+KUBECONFIG_FILE=~/.kube/revoada.yaml \
+WG_CONFIG_FILE=~/wg0.conf \
+STAGING_DB_USER=wp_staging   STAGING_DB_PASSWORD=... \
+STAGING_ROOT_PASSWORD=...    STAGING_DOMAIN=staging.ok.org.br \
+PROD_DB_USER=wp_prod         PROD_DB_PASSWORD=... \
+PROD_ROOT_PASSWORD=...       PROD_DOMAIN=ok.org.br \
+./scripts/setup-github-environments.sh
+```
+
+O script configura nos ambientes **staging** e **production** em
+`Settings → Environments`:
 
 | Nome | Tipo | Descrição |
 |---|---|---|
