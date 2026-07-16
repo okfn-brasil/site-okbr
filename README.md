@@ -12,6 +12,8 @@ site-okbr/
 ├── assets/          # CSS, JS, imagens do tema
 ├── include/         # funções auxiliares PHP
 ├── plugins/         # plugins incluídos no build Docker
+├── scripts/
+│   └── setup-github-environments.sh  # configura secrets/vars do GitHub Actions
 ├── *.php            # templates do tema WordPress
 ├── Dockerfile       # imagem para deploy em Kubernetes
 ├── .dockerignore
