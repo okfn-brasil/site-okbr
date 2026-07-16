@@ -1,0 +1,42 @@
+---
+# Copie este diretório como k8s/overlays/production-local/ (gitignored)
+# e preencha os valores reais antes de aplicar no cluster.
+#
+# Aplicar:
+#   kubectl apply -k k8s/overlays/production-local/
+#
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../production
+
+patches:
+  # ── Substitui o domínio placeholder pelo domínio real ────────────────────
+  - patch: |-
+      - op: replace
+        path: /spec/routes/0/match
+        value: "Host(`ok.org.br`) || Host(`www.ok.org.br`)"
+    target:
+      kind: IngressRoute
+      name: wordpress
+
+  # ── Domínios reais no certificado TLS ────────────────────────────────────
+  - patch: |-
+      - op: replace
+        path: /spec/dnsNames
+        value:
+          - ok.org.br
+          - www.ok.org.br
+    target:
+      kind: Certificate
+      name: site-okbr-tls
+
+  # ── ClusterIssuer real do Revoada (confirmar com CCSL) ───────────────────
+  - patch: |-
+      - op: replace
+        path: /spec/issuerRef/name
+        value: letsencrypt-prod
+    target:
+      kind: Certificate
+      name: site-okbr-tls

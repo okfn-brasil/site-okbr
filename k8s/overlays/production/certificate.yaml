@@ -1,0 +1,15 @@
+---
+# Certificado TLS gerenciado pelo cert-manager (já instalado no Revoada).
+# O ClusterIssuer correto deve ser confirmado com o CCSL/IME-USP.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: site-okbr-tls
+  namespace: openknowledge
+spec:
+  secretName: site-okbr-tls
+  issuerRef:
+    name: letsencrypt-prod   # confirmar com CCSL o nome do ClusterIssuer
+    kind: ClusterIssuer
+  dnsNames:
+    - <DOMAIN_PLACEHOLDER>   # ex: ok.org.br e/ou www.ok.org.br

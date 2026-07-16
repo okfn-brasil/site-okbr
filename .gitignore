@@ -25,3 +25,6 @@ node_modules/
 
 
 wp-config.php
+
+# Overlay de produção com valores reais (domínio, credenciais) — nunca versionar
+k8s/overlays/production-local/
