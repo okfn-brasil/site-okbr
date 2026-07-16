@@ -1,0 +1,48 @@
+name: Teardown Staging
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  teardown:
+    runs-on: ubuntu-latest
+    environment: staging
+    # Secrets/vars necessários (mesmo ambiente "staging"):
+    #   vars.WP_DOMAIN             → domínio de staging
+    #   secrets.KUBECONFIG_REVOADA → kubeconfig base64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl + kustomize
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Teardown staging resources
+        env:
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+        run: |
+          curl -sfL https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh \
+            | bash -s -- /usr/local/bin
+
+          find k8s/overlays/staging/ -name "*.yaml" | \
+            xargs sed -i "s|<STAGING_DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
+
+          kubectl delete -k k8s/overlays/staging/ --ignore-not-found=true
+
+      - name: Post cleanup comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🧹 Ambiente de homologação removido.`
+            });

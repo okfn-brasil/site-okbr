@@ -1,0 +1,13 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: site-okbr-staging-tls
+  namespace: openknowledge
+spec:
+  secretName: site-okbr-staging-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - <STAGING_DOMAIN_PLACEHOLDER>

@@ -1,15 +1,23 @@
-name: Build and Push Docker Image
+name: CI/CD
 
 on:
   push:
     branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
-  build-push:
+  # ────────────────────────────────────────────────────────────────────────────
+  # Build e push da imagem Docker para o GHCR.
+  # Roda em todo push (main) e em todo evento de PR.
+  # ────────────────────────────────────────────────────────────────────────────
+  build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
+    outputs:
+      image-tag: ${{ github.sha }}
 
     steps:
       - uses: actions/checkout@v4
@@ -35,14 +43,112 @@ jobs:
             ghcr.io/okfn-brasil/site-okbr:latest
             ghcr.io/okfn-brasil/site-okbr:${{ github.sha }}
 
-      - name: Update image tag in production overlay
-        run: |
-          TAG=${{ github.sha }}
-          sed -i "s|newTag: \".*\"|newTag: \"${TAG}\"|" \
-            k8s/overlays/production/kustomization.yaml
+  # ────────────────────────────────────────────────────────────────────────────
+  # Deploy de homologação — roda em PRs.
+  #
+  # Variáveis e secrets necessários no ambiente "staging" do repositório:
+  #   vars.WP_DOMAIN        → domínio de staging (ex: staging.ok.org.br)
+  #   secrets.KUBECONFIG_REVOADA → kubeconfig base64 com acesso ao cluster
+  #
+  # O ambiente usa namespace openknowledge-staging.
+  # ────────────────────────────────────────────────────────────────────────────
+  deploy-staging:
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment: staging
 
-      - name: Commit updated kustomization
-        uses: stefanzweifel/git-auto-commit-action@v5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl + kustomize
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Deploy staging
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+        run: |
+          curl -sfL https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh \
+            | bash -s -- /usr/local/bin
+
+          # Substitui placeholder de domínio pelo valor real da variável
+          find k8s/overlays/staging/ -name "*.yaml" | \
+            xargs sed -i "s|<STAGING_DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
+
+          # Define a tag exata da imagem recém-construída
+          kustomize edit set image \
+            ghcr.io/okfn-brasil/site-okbr="${IMAGE_TAG}" \
+            --kustomization-file k8s/overlays/staging/kustomization.yaml
+
+          kubectl apply -k k8s/overlays/staging/
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/wordpress \
+            -n openknowledge-staging --timeout=5m
+
+      - name: Post URL as PR comment
+        uses: actions/github-script@v7
         with:
-          commit_message: "ci: atualiza tag da imagem para ${{ github.sha }} [skip ci]"
-          file_pattern: k8s/overlays/production/kustomization.yaml
+          script: |
+            const domain = '${{ vars.WP_DOMAIN }}';
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **Ambiente de homologação disponível:** https://${domain}`
+            });
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Deploy de produção — roda apenas no push para main.
+  #
+  # Variáveis e secrets necessários no ambiente "production" do repositório:
+  #   vars.WP_DOMAIN        → domínio de produção (ex: ok.org.br)
+  #   secrets.KUBECONFIG_REVOADA → kubeconfig base64 com acesso ao cluster
+  # ────────────────────────────────────────────────────────────────────────────
+  deploy-production:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl + kustomize
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Deploy production
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+        run: |
+          curl -sfL https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh \
+            | bash -s -- /usr/local/bin
+
+          find k8s/overlays/production/ -name "*.yaml" | \
+            xargs sed -i "s|<DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
+
+          kustomize edit set image \
+            ghcr.io/okfn-brasil/site-okbr="${IMAGE_TAG}" \
+            --kustomization-file k8s/overlays/production/kustomization.yaml
+
+          kubectl apply -k k8s/overlays/production/
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/wordpress \
+            -n openknowledge --timeout=5m
