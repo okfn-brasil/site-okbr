@@ -8,8 +8,10 @@ namespace: openknowledge
 namePrefix: staging-
 
 # Label adicional para diferenciar selectors de pods staging vs. produção.
-commonLabels:
-  environment: staging
+labels:
+  - pairs:
+      environment: staging
+    includeSelectors: true
 
 resources:
   - ../../base
