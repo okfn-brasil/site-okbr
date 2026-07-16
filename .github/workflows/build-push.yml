@@ -109,9 +109,6 @@ jobs:
           IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
           WP_DOMAIN: ${{ vars.WP_DOMAIN }}
         run: |
-          curl -sfL https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh \
-            | bash -s -- /usr/local/bin
-
           find k8s/overlays/staging/ -name "*.yaml" | \
             xargs sed -i "s|<STAGING_DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
 
@@ -208,9 +205,6 @@ jobs:
           IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
           WP_DOMAIN: ${{ vars.WP_DOMAIN }}
         run: |
-          curl -sfL https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh \
-            | bash -s -- /usr/local/bin
-
           find k8s/overlays/production/ -name "*.yaml" | \
             xargs sed -i "s|<DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
 
