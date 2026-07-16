@@ -9,7 +9,6 @@ on:
 jobs:
   # ────────────────────────────────────────────────────────────────────────────
   # Build e push da imagem Docker para o GHCR.
-  # Roda em todo push (main) e em todo evento de PR.
   # ────────────────────────────────────────────────────────────────────────────
   build:
     runs-on: ubuntu-latest
@@ -46,11 +45,13 @@ jobs:
   # ────────────────────────────────────────────────────────────────────────────
   # Deploy de homologação — roda em PRs.
   #
-  # Variáveis e secrets necessários no ambiente "staging" do repositório:
-  #   vars.WP_DOMAIN        → domínio de staging (ex: staging.ok.org.br)
-  #   secrets.KUBECONFIG_REVOADA → kubeconfig base64 com acesso ao cluster
-  #
-  # O ambiente usa namespace openknowledge-staging.
+  # Ambiente "staging" — variáveis e secrets necessários:
+  #   vars.WP_DOMAIN             → domínio staging (ex: staging.ok.org.br)
+  #   vars.WORDPRESS_DB_USER     → usuário do banco
+  #   secrets.KUBECONFIG_REVOADA → kubeconfig base64
+  #   secrets.WORDPRESS_DB_PASSWORD    → senha do banco WordPress
+  #   secrets.MARIADB_ROOT_PASSWORD    → senha root do MariaDB
+  #   secrets.WORDPRESS_AUTH_SALTS     → 8 linhas PHP de https://api.wordpress.org/secret-key/1.1/salt/
   # ────────────────────────────────────────────────────────────────────────────
   deploy-staging:
     if: github.event_name == 'pull_request'
@@ -70,6 +71,28 @@ jobs:
           echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
 
+      - name: Create/update Kubernetes secret
+        env:
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+          DB_USER: ${{ vars.WORDPRESS_DB_USER }}
+          DB_PASSWORD: ${{ secrets.WORDPRESS_DB_PASSWORD }}
+          MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+          WORDPRESS_AUTH_SALTS: ${{ secrets.WORDPRESS_AUTH_SALTS }}
+        run: |
+          # O namePrefix staging- faz o secret se chamar staging-wordpress-secret
+          kubectl create secret generic staging-wordpress-secret \
+            -n openknowledge \
+            --from-literal=WORDPRESS_DB_USER="${DB_USER}" \
+            --from-literal=WORDPRESS_DB_PASSWORD="${DB_PASSWORD}" \
+            --from-literal=MARIADB_ROOT_PASSWORD="${MARIADB_ROOT_PASSWORD}" \
+            --from-literal=WORDPRESS_CONFIG_EXTRA="
+          define('WP_HOME',    'https://${WP_DOMAIN}');
+          define('WP_SITEURL', 'https://${WP_DOMAIN}');
+          ${WORDPRESS_AUTH_SALTS}
+          define('WP_MEMORY_LIMIT', '128M');
+          define('FORCE_SSL_ADMIN', true);" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Deploy staging
         env:
           IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
@@ -78,11 +101,9 @@ jobs:
           curl -sfL https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh \
             | bash -s -- /usr/local/bin
 
-          # Substitui placeholder de domínio pelo valor real da variável
           find k8s/overlays/staging/ -name "*.yaml" | \
             xargs sed -i "s|<STAGING_DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
 
-          # Define a tag exata da imagem recém-construída
           kustomize edit set image \
             ghcr.io/okfn-brasil/site-okbr="${IMAGE_TAG}" \
             --kustomization-file k8s/overlays/staging/kustomization.yaml
@@ -91,8 +112,8 @@ jobs:
 
       - name: Wait for rollout
         run: |
-          kubectl rollout status deployment/wordpress \
-            -n openknowledge-staging --timeout=5m
+          kubectl rollout status deployment/staging-wordpress \
+            -n openknowledge --timeout=5m
 
       - name: Post URL as PR comment
         uses: actions/github-script@v7
@@ -109,9 +130,13 @@ jobs:
   # ────────────────────────────────────────────────────────────────────────────
   # Deploy de produção — roda apenas no push para main.
   #
-  # Variáveis e secrets necessários no ambiente "production" do repositório:
-  #   vars.WP_DOMAIN        → domínio de produção (ex: ok.org.br)
-  #   secrets.KUBECONFIG_REVOADA → kubeconfig base64 com acesso ao cluster
+  # Ambiente "production" — variáveis e secrets necessários:
+  #   vars.WP_DOMAIN             → domínio produção (ex: demo.ok.org.br)
+  #   vars.WORDPRESS_DB_USER     → usuário do banco
+  #   secrets.KUBECONFIG_REVOADA → kubeconfig base64
+  #   secrets.WORDPRESS_DB_PASSWORD    → senha do banco WordPress
+  #   secrets.MARIADB_ROOT_PASSWORD    → senha root do MariaDB
+  #   secrets.WORDPRESS_AUTH_SALTS     → 8 linhas PHP de https://api.wordpress.org/secret-key/1.1/salt/
   # ────────────────────────────────────────────────────────────────────────────
   deploy-production:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -130,6 +155,27 @@ jobs:
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
+
+      - name: Create/update Kubernetes secret
+        env:
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+          DB_USER: ${{ vars.WORDPRESS_DB_USER }}
+          DB_PASSWORD: ${{ secrets.WORDPRESS_DB_PASSWORD }}
+          MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+          WORDPRESS_AUTH_SALTS: ${{ secrets.WORDPRESS_AUTH_SALTS }}
+        run: |
+          kubectl create secret generic wordpress-secret \
+            -n openknowledge \
+            --from-literal=WORDPRESS_DB_USER="${DB_USER}" \
+            --from-literal=WORDPRESS_DB_PASSWORD="${DB_PASSWORD}" \
+            --from-literal=MARIADB_ROOT_PASSWORD="${MARIADB_ROOT_PASSWORD}" \
+            --from-literal=WORDPRESS_CONFIG_EXTRA="
+          define('WP_HOME',    'https://${WP_DOMAIN}');
+          define('WP_SITEURL', 'https://${WP_DOMAIN}');
+          ${WORDPRESS_AUTH_SALTS}
+          define('WP_MEMORY_LIMIT', '256M');
+          define('FORCE_SSL_ADMIN', true);" \
+            --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy production
         env:
