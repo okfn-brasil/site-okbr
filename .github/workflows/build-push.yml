@@ -49,6 +49,7 @@ jobs:
   #   vars.WP_DOMAIN             → domínio staging (ex: staging.ok.org.br)
   #   vars.WORDPRESS_DB_USER     → usuário do banco
   #   secrets.KUBECONFIG_REVOADA → kubeconfig base64
+  #   secrets.WIREGUARD_CONFIG   → conteúdo do arquivo wg0.conf (VPN Revoada)
   #   secrets.WORDPRESS_DB_PASSWORD    → senha do banco WordPress
   #   secrets.MARIADB_ROOT_PASSWORD    → senha root do MariaDB
   #   secrets.WORDPRESS_AUTH_SALTS     → 8 linhas PHP de https://api.wordpress.org/secret-key/1.1/salt/
@@ -64,6 +65,16 @@ jobs:
 
       - name: Set up kubectl + kustomize
         uses: azure/setup-kubectl@v4
+
+      - name: Instala WireGuard
+        run: sudo apt-get install -y wireguard wireguard-tools
+
+      - name: Conecta à VPN Revoada
+        run: |
+          echo "${{ secrets.WIREGUARD_CONFIG }}" | sudo tee /etc/wireguard/wg0.conf > /dev/null
+          sudo chmod 600 /etc/wireguard/wg0.conf
+          sudo wg-quick up wg0
+          sleep 2
 
       - name: Configure kubeconfig
         run: |
@@ -115,6 +126,10 @@ jobs:
           kubectl rollout status deployment/staging-wordpress \
             -n openknowledge --timeout=5m
 
+      - name: Desconecta VPN
+        if: always()
+        run: sudo wg-quick down wg0
+
       - name: Post URL as PR comment
         uses: actions/github-script@v7
         with:
@@ -134,6 +149,7 @@ jobs:
   #   vars.WP_DOMAIN             → domínio produção (ex: demo.ok.org.br)
   #   vars.WORDPRESS_DB_USER     → usuário do banco
   #   secrets.KUBECONFIG_REVOADA → kubeconfig base64
+  #   secrets.WIREGUARD_CONFIG   → conteúdo do arquivo wg0.conf (VPN Revoada)
   #   secrets.WORDPRESS_DB_PASSWORD    → senha do banco WordPress
   #   secrets.MARIADB_ROOT_PASSWORD    → senha root do MariaDB
   #   secrets.WORDPRESS_AUTH_SALTS     → 8 linhas PHP de https://api.wordpress.org/secret-key/1.1/salt/
@@ -149,6 +165,16 @@ jobs:
 
       - name: Set up kubectl + kustomize
         uses: azure/setup-kubectl@v4
+
+      - name: Instala WireGuard
+        run: sudo apt-get install -y wireguard wireguard-tools
+
+      - name: Conecta à VPN Revoada
+        run: |
+          echo "${{ secrets.WIREGUARD_CONFIG }}" | sudo tee /etc/wireguard/wg0.conf > /dev/null
+          sudo chmod 600 /etc/wireguard/wg0.conf
+          sudo wg-quick up wg0
+          sleep 2
 
       - name: Configure kubeconfig
         run: |
@@ -198,3 +224,7 @@ jobs:
         run: |
           kubectl rollout status deployment/wordpress \
             -n openknowledge --timeout=5m
+
+      - name: Desconecta VPN
+        if: always()
+        run: sudo wg-quick down wg0
