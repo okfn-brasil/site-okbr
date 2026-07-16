@@ -112,9 +112,7 @@ jobs:
           find k8s/overlays/staging/ -name "*.yaml" | \
             xargs sed -i "s|<STAGING_DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
 
-          kustomize edit set image \
-            ghcr.io/okfn-brasil/site-okbr="${IMAGE_TAG}" \
-            --kustomization-file k8s/overlays/staging/kustomization.yaml
+          (cd k8s/overlays/staging && kustomize edit set image ghcr.io/okfn-brasil/site-okbr="${IMAGE_TAG}")
 
           kubectl apply -k k8s/overlays/staging/
 
@@ -208,9 +206,7 @@ jobs:
           find k8s/overlays/production/ -name "*.yaml" | \
             xargs sed -i "s|<DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
 
-          kustomize edit set image \
-            ghcr.io/okfn-brasil/site-okbr="${IMAGE_TAG}" \
-            --kustomization-file k8s/overlays/production/kustomization.yaml
+          (cd k8s/overlays/production && kustomize edit set image ghcr.io/okfn-brasil/site-okbr="${IMAGE_TAG}")
 
           kubectl apply -k k8s/overlays/production/
 
