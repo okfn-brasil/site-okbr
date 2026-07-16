@@ -8,15 +8,14 @@ jobs:
   teardown:
     runs-on: ubuntu-latest
     environment: staging
-    # Secrets/vars necessários (mesmo ambiente "staging"):
-    #   vars.WP_DOMAIN             → domínio de staging
+    # Secrets/vars necessários (ambiente "staging"):
     #   secrets.KUBECONFIG_REVOADA → kubeconfig base64
     #   secrets.WIREGUARD_CONFIG   → conteúdo do arquivo wg0.conf (VPN Revoada)
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up kubectl + kustomize
+      - name: Set up kubectl
         uses: azure/setup-kubectl@v4
 
       - name: Instala WireGuard
@@ -35,14 +34,17 @@ jobs:
           echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
 
-      - name: Teardown staging resources
-        env:
-          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+      - name: Teardown staging (preserva PVCs)
         run: |
-          find k8s/overlays/staging/ -name "*.yaml" | \
-            xargs sed -i "s|<STAGING_DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
-
-          kubectl delete -k k8s/overlays/staging/ --ignore-not-found=true
+          # Remove todos os recursos de staging EXCETO os PVCs.
+          # Os PVCs (banco + uploads) são preservados para que o próximo deploy
+          # de staging encontre o banco já populado, sem necessidade de re-seed.
+          kubectl delete \
+            deployments,statefulsets,services,configmaps,secrets,\
+            ingressroutes.traefik.io,certificates.cert-manager.io \
+            -n openknowledge \
+            -l environment=staging \
+            --ignore-not-found=true
 
       - name: Desconecta VPN
         if: always()
@@ -56,5 +58,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🧹 Ambiente de homologação removido.`
+              body: `🧹 Ambiente de homologação removido (PVCs preservados para o próximo deploy).`
             });

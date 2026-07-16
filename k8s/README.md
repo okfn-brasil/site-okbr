@@ -470,6 +470,52 @@ kubectl delete pod upload-helper -n openknowledge
 
 ---
 
+## Banco de dados de staging
+
+### Estratégia
+
+Os PVCs de staging (banco + uploads) são **preservados entre teardowns**.
+Quando uma PR é fechada, os Deployments, StatefulSets e demais recursos são
+removidos, mas os volumes ficam intactos. Na próxima PR, o banco já está
+populado — sem necessidade de re-seed manual.
+
+```
+PR aberta  → deploy staging  → MariaDB inicia com dados do ciclo anterior
+PR fechada → teardown        → PVCs preservados (banco continua no disco)
+PR aberta  → deploy staging  → MariaDB reutiliza os dados existentes
+```
+
+### Reset manual (quando staging está defasado)
+
+Quando os dados de staging estiverem muito desatualizados ou corrompidos,
+use o workflow `Reset banco de staging` no GitHub Actions UI:
+
+`Actions → Reset banco de staging → Run workflow`
+
+O workflow faz automaticamente:
+1. Dump do banco de **produção** (`mariadb` no namespace `openknowledge`)
+2. Importa no banco de **staging** (`staging-mariadb`)
+3. Substitui as URLs de produção pelas URLs de staging
+4. Reinicia o pod WordPress para limpar cache
+
+### Deletar os PVCs de staging manualmente
+
+Se precisar de um reset completo do zero (banco vazio):
+
+```bash
+sudo wg-quick up wg0
+
+# Remove PVCs de staging
+kubectl delete pvc \
+  staging-wordpress-uploads \
+  mariadb-data-staging-mariadb-0 \
+  -n openknowledge
+
+# No próximo deploy de staging, MariaDB inicializa do zero
+```
+
+---
+
 ## Escalar horizontalmente (futuro)
 
 A configuração atual usa 1 réplica com PVC `ReadWriteOnce`. Para escalar:

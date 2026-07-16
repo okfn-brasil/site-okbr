@@ -1,0 +1,151 @@
+name: Reset banco de staging
+
+# Disparo manual pelo GitHub Actions UI.
+# Faz dump do banco de produção e importa no staging.
+# Útil quando staging está muito defasado ou corrompido.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dump-production:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Instala WireGuard
+        run: sudo apt-get install -y wireguard wireguard-tools
+
+      - name: Conecta à VPN Revoada
+        run: |
+          echo "${{ secrets.WIREGUARD_CONFIG }}" | sudo tee /etc/wireguard/wg0.conf > /dev/null
+          sudo chmod 600 /etc/wireguard/wg0.conf
+          sudo wg-quick up wg0
+          sleep 2
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Dump banco de produção
+        env:
+          MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+        run: |
+          kubectl exec statefulset/mariadb -n openknowledge -- \
+            mariadb-dump \
+              -u root -p"${MARIADB_ROOT_PASSWORD}" \
+              --single-transaction \
+              --routines \
+              --triggers \
+              wordpress \
+          > prod_dump.sql
+
+          echo "Dump concluído: $(wc -l < prod_dump.sql) linhas"
+
+      - name: Desconecta VPN
+        if: always()
+        run: sudo wg-quick down wg0
+
+      - name: Salva dump como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-db-dump
+          path: prod_dump.sql
+          retention-days: 1
+
+  import-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    needs: dump-production
+
+    steps:
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Instala WireGuard
+        run: sudo apt-get install -y wireguard wireguard-tools
+
+      - name: Conecta à VPN Revoada
+        run: |
+          echo "${{ secrets.WIREGUARD_CONFIG }}" | sudo tee /etc/wireguard/wg0.conf > /dev/null
+          sudo chmod 600 /etc/wireguard/wg0.conf
+          sudo wg-quick up wg0
+          sleep 2
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Baixa dump
+        uses: actions/download-artifact@v4
+        with:
+          name: prod-db-dump
+
+      - name: Verifica que staging-mariadb está rodando
+        run: |
+          kubectl wait pod/staging-mariadb-0 \
+            -n openknowledge \
+            --for=condition=Ready \
+            --timeout=60s
+
+      - name: Importa dump no staging
+        env:
+          MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+        run: |
+          # Copia dump para dentro do pod
+          kubectl cp prod_dump.sql \
+            openknowledge/staging-mariadb-0:/tmp/dump.sql
+
+          # Importa
+          kubectl exec staging-mariadb-0 -n openknowledge -- \
+            mariadb -u root -p"${MARIADB_ROOT_PASSWORD}" wordpress \
+            -e "source /tmp/dump.sql"
+
+          # Atualiza URLs de produção → staging
+          PROD_DOMAIN=$(kubectl get secret wordpress-secret \
+            -n openknowledge \
+            -o jsonpath='{.data.WORDPRESS_CONFIG_EXTRA}' \
+            | base64 -d \
+            | grep WP_HOME \
+            | sed "s/.*'https:\/\/\([^']*\)'.*/\1/")
+
+          if [[ -n "$PROD_DOMAIN" && "$PROD_DOMAIN" != "$WP_DOMAIN" ]]; then
+            echo "Substituindo URLs: $PROD_DOMAIN → $WP_DOMAIN"
+            kubectl exec staging-mariadb-0 -n openknowledge -- \
+              mariadb -u root -p"${MARIADB_ROOT_PASSWORD}" wordpress <<SQL
+          UPDATE wp_options
+            SET option_value = REPLACE(option_value, 'https://${PROD_DOMAIN}', 'https://${WP_DOMAIN}')
+            WHERE option_name IN ('siteurl', 'home');
+          UPDATE wp_posts
+            SET guid = REPLACE(guid, 'https://${PROD_DOMAIN}', 'https://${WP_DOMAIN}');
+          UPDATE wp_posts
+            SET post_content = REPLACE(post_content, 'https://${PROD_DOMAIN}', 'https://${WP_DOMAIN}');
+          UPDATE wp_postmeta
+            SET meta_value = REPLACE(meta_value, 'https://${PROD_DOMAIN}', 'https://${WP_DOMAIN}')
+            WHERE meta_value LIKE '%${PROD_DOMAIN}%';
+          SQL
+          fi
+
+          # Remove dump temporário do pod
+          kubectl exec staging-mariadb-0 -n openknowledge -- \
+            rm /tmp/dump.sql
+
+          echo "Banco de staging atualizado a partir de produção."
+
+      - name: Reinicia WordPress para limpar cache
+        run: |
+          kubectl rollout restart deployment/staging-wordpress -n openknowledge
+          kubectl rollout status deployment/staging-wordpress \
+            -n openknowledge --timeout=3m
+
+      - name: Desconecta VPN
+        if: always()
+        run: sudo wg-quick down wg0
