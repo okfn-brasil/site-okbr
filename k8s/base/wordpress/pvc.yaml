@@ -13,4 +13,4 @@ spec:
   storageClassName: ceph-block-hdd
   resources:
     requests:
-      storage: 20Gi
+      storage: 10Gi
