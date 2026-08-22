@@ -1,0 +1,111 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: openknowledge
+
+# Prefixo em todos os recursos evita colisão com produção no mesmo namespace.
+namePrefix: staging-
+
+# Label adicional para diferenciar selectors de pods staging vs. produção.
+labels:
+  - pairs:
+      environment: staging
+    includeSelectors: true
+
+resources:
+  - ../../base
+  - certificate.yaml
+
+images:
+  - name: ghcr.io/okfn-brasil/site-okbr
+    newTag: "latest"  # substituído em CI com kustomize edit set image
+
+patches:
+  # ── StatefulSet: serviceName precisa do prefixo (Kustomize não corrige) ──
+  - patch: |-
+      - op: replace
+        path: /spec/serviceName
+        value: staging-mariadb
+    target:
+      kind: StatefulSet
+      name: mariadb
+
+  # ── ConfigMap: DB_HOST aponta pro serviço staging dentro do mesmo ns ─────
+  - patch: |-
+      - op: replace
+        path: /data/WORDPRESS_DB_HOST
+        value: "staging-mariadb:3306"
+    target:
+      kind: ConfigMap
+      name: wordpress-config
+
+  # ── IngressRoute HTTPS staging ────────────────────────────────────────────
+  - patch: |-
+      - op: replace
+        path: /spec
+        value:
+          entryPoints:
+            - websecure
+          routes:
+            - match: "Host(`<STAGING_DOMAIN_PLACEHOLDER>`)"
+              kind: Rule
+              services:
+                - name: staging-wordpress
+                  port: 80
+          tls:
+            secretName: site-okbr-staging-tls
+    target:
+      kind: IngressRoute
+      name: wordpress
+
+  # ── Namespace: já existe, não reaplicar ───────────────────────────────────
+  - patch: |-
+      $patch: delete
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: openknowledge
+    target:
+      kind: Namespace
+      name: openknowledge
+
+  # ── Recursos menores para staging ─────────────────────────────────────────
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: "128Mi"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: "256Mi"
+    target:
+      kind: StatefulSet
+      name: mariadb
+
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: "128Mi"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: "256Mi"
+    target:
+      kind: Deployment
+      name: wordpress
+
+  # ── PVCs menores para staging ─────────────────────────────────────────────
+  - patch: |-
+      - op: replace
+        path: /spec/volumeClaimTemplates/0/spec/resources/requests/storage
+        value: "5Gi"
+    target:
+      kind: StatefulSet
+      name: mariadb
+
+  - patch: |-
+      - op: replace
+        path: /spec/resources/requests/storage
+        value: "5Gi"
+    target:
+      kind: PersistentVolumeClaim
+      name: wordpress-uploads

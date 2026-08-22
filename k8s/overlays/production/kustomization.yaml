@@ -1,0 +1,48 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - certificate.yaml
+
+images:
+  - name: ghcr.io/okfn-brasil/site-okbr
+    newTag: "latest"  # atualizado automaticamente pelo workflow de CI
+
+patches:
+  # ── IngressRoute HTTPS ──────────────────────────────────────────────────────
+  - patch: |-
+      - op: replace
+        path: /spec
+        value:
+          entryPoints:
+            - websecure
+          routes:
+            - match: "Host(`<DOMAIN_PLACEHOLDER>`)"
+              kind: Rule
+              middlewares:
+                - name: security-headers
+                  namespace: querido-diario
+                - name: compression
+                  namespace: querido-diario
+              services:
+                - name: wordpress
+                  port: 80
+          tls:
+            secretName: site-okbr-tls
+    target:
+      kind: IngressRoute
+      name: wordpress
+
+  # ── Namespace: não aplicar (já existe no cluster) ──────────────────────────
+  - patch: |-
+      $patch: delete
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: openknowledge
+    target:
+      kind: Namespace
+      name: openknowledge
+

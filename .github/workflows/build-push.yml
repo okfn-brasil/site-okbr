@@ -1,0 +1,222 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  # ────────────────────────────────────────────────────────────────────────────
+  # Build e push da imagem Docker para o GHCR.
+  # ────────────────────────────────────────────────────────────────────────────
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image-tag: ${{ github.sha }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          cache-from: type=registry,ref=ghcr.io/okfn-brasil/site-okbr:latest
+          cache-to: type=inline
+          tags: |
+            ghcr.io/okfn-brasil/site-okbr:latest
+            ghcr.io/okfn-brasil/site-okbr:${{ github.sha }}
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Deploy de homologação — roda em PRs.
+  #
+  # Ambiente "staging" — variáveis e secrets necessários:
+  #   vars.WP_DOMAIN             → domínio staging (ex: staging.ok.org.br)
+  #   vars.WORDPRESS_DB_USER     → usuário do banco
+  #   secrets.KUBECONFIG_REVOADA → kubeconfig base64
+  #   secrets.WIREGUARD_CONFIG   → conteúdo do arquivo wg0.conf (VPN Revoada)
+  #   secrets.WORDPRESS_DB_PASSWORD    → senha do banco WordPress
+  #   secrets.MARIADB_ROOT_PASSWORD    → senha root do MariaDB
+  #   secrets.WORDPRESS_AUTH_SALTS     → 8 linhas PHP de https://api.wordpress.org/secret-key/1.1/salt/
+  # ────────────────────────────────────────────────────────────────────────────
+  deploy-staging:
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl + kustomize
+        uses: azure/setup-kubectl@v4
+
+      - name: Instala WireGuard
+        run: sudo apt-get install -y wireguard wireguard-tools
+
+      - name: Conecta à VPN Revoada
+        run: |
+          echo "${{ secrets.WIREGUARD_CONFIG }}" | sudo tee /etc/wireguard/wg0.conf > /dev/null
+          sudo chmod 600 /etc/wireguard/wg0.conf
+          sudo wg-quick up wg0
+          sleep 2
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Deploy staging
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+        run: |
+          find k8s/overlays/staging/ -name "*.yaml" | \
+            xargs sed -i "s|<STAGING_DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
+
+          (cd k8s/overlays/staging && kustomize edit set image ghcr.io/okfn-brasil/site-okbr:"${IMAGE_TAG}")
+
+          kubectl apply -k k8s/overlays/staging/
+
+      - name: Create/update Kubernetes secret
+        env:
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+          DB_USER: ${{ vars.WORDPRESS_DB_USER }}
+          DB_PASSWORD: ${{ secrets.WORDPRESS_DB_PASSWORD }}
+          MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+          WORDPRESS_AUTH_SALTS: ${{ secrets.WORDPRESS_AUTH_SALTS }}
+        run: |
+          # Sobrescreve o placeholder criado pelo kustomize com os valores reais.
+          # O namePrefix staging- faz o secret se chamar staging-wordpress-secret.
+          kubectl create secret generic staging-wordpress-secret \
+            -n openknowledge \
+            --from-literal=WORDPRESS_DB_USER="${DB_USER}" \
+            --from-literal=WORDPRESS_DB_PASSWORD="${DB_PASSWORD}" \
+            --from-literal=MARIADB_ROOT_PASSWORD="${MARIADB_ROOT_PASSWORD}" \
+            --from-literal=WORDPRESS_CONFIG_EXTRA="
+          define('WP_HOME',    'https://${WP_DOMAIN}');
+          define('WP_SITEURL', 'https://${WP_DOMAIN}');
+          ${WORDPRESS_AUTH_SALTS}
+          define('WP_MEMORY_LIMIT', '128M');
+          define('FORCE_SSL_ADMIN', true);" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/staging-wordpress \
+            -n openknowledge --timeout=5m
+
+      - name: Desconecta VPN
+        if: always()
+        run: sudo wg-quick down wg0
+
+      - name: Post URL as PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const domain = '${{ vars.WP_DOMAIN }}';
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **Ambiente de homologação disponível:** https://${domain}`
+            });
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Deploy de produção — roda apenas no push para main.
+  #
+  # Ambiente "production" — variáveis e secrets necessários:
+  #   vars.WP_DOMAIN             → domínio produção (ex: demo.ok.org.br)
+  #   vars.WORDPRESS_DB_USER     → usuário do banco
+  #   secrets.KUBECONFIG_REVOADA → kubeconfig base64
+  #   secrets.WIREGUARD_CONFIG   → conteúdo do arquivo wg0.conf (VPN Revoada)
+  #   secrets.WORDPRESS_DB_PASSWORD    → senha do banco WordPress
+  #   secrets.MARIADB_ROOT_PASSWORD    → senha root do MariaDB
+  #   secrets.WORDPRESS_AUTH_SALTS     → 8 linhas PHP de https://api.wordpress.org/secret-key/1.1/salt/
+  # ────────────────────────────────────────────────────────────────────────────
+  deploy-production:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl + kustomize
+        uses: azure/setup-kubectl@v4
+
+      - name: Instala WireGuard
+        run: sudo apt-get install -y wireguard wireguard-tools
+
+      - name: Conecta à VPN Revoada
+        run: |
+          echo "${{ secrets.WIREGUARD_CONFIG }}" | sudo tee /etc/wireguard/wg0.conf > /dev/null
+          sudo chmod 600 /etc/wireguard/wg0.conf
+          sudo wg-quick up wg0
+          sleep 2
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_REVOADA }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Deploy production
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+        run: |
+          find k8s/overlays/production/ -name "*.yaml" | \
+            xargs sed -i "s|<DOMAIN_PLACEHOLDER>|${WP_DOMAIN}|g"
+
+          (cd k8s/overlays/production && kustomize edit set image ghcr.io/okfn-brasil/site-okbr:"${IMAGE_TAG}")
+
+          kubectl apply -k k8s/overlays/production/
+
+      - name: Create/update Kubernetes secret
+        env:
+          WP_DOMAIN: ${{ vars.WP_DOMAIN }}
+          DB_USER: ${{ vars.WORDPRESS_DB_USER }}
+          DB_PASSWORD: ${{ secrets.WORDPRESS_DB_PASSWORD }}
+          MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+          WORDPRESS_AUTH_SALTS: ${{ secrets.WORDPRESS_AUTH_SALTS }}
+        run: |
+          # Sobrescreve o placeholder criado pelo kustomize com os valores reais.
+          kubectl create secret generic wordpress-secret \
+            -n openknowledge \
+            --from-literal=WORDPRESS_DB_USER="${DB_USER}" \
+            --from-literal=WORDPRESS_DB_PASSWORD="${DB_PASSWORD}" \
+            --from-literal=MARIADB_ROOT_PASSWORD="${MARIADB_ROOT_PASSWORD}" \
+            --from-literal=WORDPRESS_CONFIG_EXTRA="
+          define('WP_HOME',    'https://${WP_DOMAIN}');
+          define('WP_SITEURL', 'https://${WP_DOMAIN}');
+          ${WORDPRESS_AUTH_SALTS}
+          define('WP_MEMORY_LIMIT', '256M');
+          define('FORCE_SSL_ADMIN', true);" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/wordpress \
+            -n openknowledge --timeout=5m
+
+      - name: Desconecta VPN
+        if: always()
+        run: sudo wg-quick down wg0

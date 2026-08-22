@@ -1,0 +1,71 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  namespace: openknowledge
+spec:
+  # 1 réplica: uploads estão em PVC RWO. Para escalar, migrar uploads
+  # para S3 (plugin WP Offload Media) e trocar PVC para ceph-filesystem RWX.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  strategy:
+    type: Recreate  # necessário com PVC RWO — evita dois pods montando o mesmo volume
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+        - name: wordpress
+          image: ghcr.io/okfn-brasil/site-okbr:latest
+          envFrom:
+            - configMapRef:
+                name: wordpress-config
+          env:
+            - name: WORDPRESS_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: wordpress-secret
+                  key: WORDPRESS_DB_USER
+            - name: WORDPRESS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: wordpress-secret
+                  key: WORDPRESS_DB_PASSWORD
+            - name: WORDPRESS_CONFIG_EXTRA
+              valueFrom:
+                secretKeyRef:
+                  name: wordpress-secret
+                  key: WORDPRESS_CONFIG_EXTRA
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: uploads
+              mountPath: /var/www/html/wp-content/uploads
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /wp-login.php
+              port: 80
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /wp-login.php
+              port: 80
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 5
+      volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: wordpress-uploads
