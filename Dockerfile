@@ -1,12 +1,19 @@
 FROM wordpress:php8.4-apache
 
-# Custom PHP limits for WordPress & large plugins (WooCommerce, Jetpack, ACF, etc.)
+# Custom PHP limits & OPcache optimization for WordPress
 RUN { \
     echo 'memory_limit = 512M'; \
     echo 'max_execution_time = 300'; \
     echo 'upload_max_filesize = 128M'; \
     echo 'post_max_size = 128M'; \
     echo 'max_input_time = 300'; \
+    echo 'opcache.enable = 1'; \
+    echo 'opcache.enable_cli = 1'; \
+    echo 'opcache.memory_consumption = 256'; \
+    echo 'opcache.interned_strings_buffer = 16'; \
+    echo 'opcache.max_accelerated_files = 10000'; \
+    echo 'opcache.validate_timestamps = 1'; \
+    echo 'opcache.revalidate_freq = 2'; \
 } > /usr/local/etc/php/conf.d/custom-limits.ini
 
 # Tuned Apache MPM Prefork configuration (reduces memory consumption to ~250MB & recycles workers)

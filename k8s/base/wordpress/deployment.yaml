@@ -73,7 +73,14 @@ spec:
                     echo "upload_max_filesize = 128M" >> /usr/local/etc/php/conf.d/custom-limits.ini
                     echo "post_max_size = 128M" >> /usr/local/etc/php/conf.d/custom-limits.ini
                     echo "max_input_time = 300" >> /usr/local/etc/php/conf.d/custom-limits.ini
-                    mkdir -p /var/www/html/wp-content/upgrade /var/www/html/wp-content/languages /var/www/html/wp-content/uploads /var/www/html/wp-content/plugins
+                    echo "opcache.enable = 1" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.enable_cli = 1" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.memory_consumption = 256" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.interned_strings_buffer = 16" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.max_accelerated_files = 10000" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.validate_timestamps = 1" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.revalidate_freq = 2" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    mkdir -p /var/www/html/wp-content/upgrade /var/www/html/wp-content/languages /var/www/html/wp-content/uploads /var/www/html/wp-content/plugins /var/www/html/wp-content/cache
                     chown -R www-data:www-data /var/www/html/wp-content
                     chmod -R 775 /var/www/html/wp-content
           volumeMounts:
