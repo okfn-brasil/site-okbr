@@ -142,6 +142,15 @@ jobs:
           kubectl rollout status deployment/staging-wordpress \
             -n openknowledge --timeout=5m
 
+      - name: Configure Portuguese (pt_BR) language
+        run: |
+          POD=$(kubectl get pods -n openknowledge -l app=wordpress,environment=staging -o jsonpath='{.items[0].metadata.name}')
+          kubectl exec -n openknowledge $POD -c wordpress -- bash -c "
+            wp language core install pt_BR --activate --allow-root || true
+            wp language plugin --all install pt_BR --allow-root || true
+            wp language theme --all install pt_BR --allow-root || true
+          "
+
       - name: Desconecta VPN
         if: always()
         run: sudo wg-quick down wg0
@@ -243,6 +252,15 @@ jobs:
         run: |
           kubectl rollout status deployment/wordpress \
             -n openknowledge --timeout=5m
+
+      - name: Configure Portuguese (pt_BR) language
+        run: |
+          POD=$(kubectl get pods -n openknowledge -l app=wordpress,environment=production -o jsonpath='{.items[0].metadata.name}')
+          kubectl exec -n openknowledge $POD -c wordpress -- bash -c "
+            wp language core install pt_BR --activate --allow-root || true
+            wp language plugin --all install pt_BR --allow-root || true
+            wp language theme --all install pt_BR --allow-root || true
+          "
 
       - name: Desconecta VPN
         if: always()

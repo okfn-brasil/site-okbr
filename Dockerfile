@@ -1,5 +1,10 @@
 FROM wordpress:php8.4-apache
 
+# Install WP-CLI for automated administration and language configuration
+RUN curl -s -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp
+
 # Custom PHP limits & OPcache optimization for WordPress
 RUN { \
     echo 'memory_limit = 512M'; \
