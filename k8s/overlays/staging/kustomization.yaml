@@ -16,6 +16,7 @@ labels:
 resources:
   - ../../base
   - certificate.yaml
+  - middleware-basic-auth.yaml
 
 images:
   - name: ghcr.io/okfn-brasil/site-okbr
@@ -50,6 +51,8 @@ patches:
           routes:
             - match: "Host(`<STAGING_DOMAIN_PLACEHOLDER>`)"
               kind: Rule
+              middlewares:
+                - name: staging-basic-auth
               services:
                 - name: staging-wordpress
                   port: 80

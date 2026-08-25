@@ -124,6 +124,19 @@ jobs:
           define('FORCE_SSL_ADMIN', true);" \
             --dry-run=client -o yaml | kubectl apply -f -
 
+      - name: Create/update Basic Auth secret for staging
+        env:
+          BASIC_AUTH_USERS: ${{ secrets.STAGING_BASIC_AUTH }}
+        run: |
+          if [ -n "${BASIC_AUTH_USERS}" ]; then
+            kubectl create secret generic staging-basic-auth-secret \
+              -n openknowledge \
+              --from-literal=users="${BASIC_AUTH_USERS}" \
+              --dry-run=client -o yaml | kubectl apply -f -
+          else
+            echo "Aviso: secret STAGING_BASIC_AUTH não configurado no ambiente staging do GitHub."
+          fi
+
       - name: Wait for rollout
         run: |
           kubectl rollout status deployment/staging-wordpress \

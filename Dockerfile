@@ -9,6 +9,17 @@ RUN { \
     echo 'max_input_time = 300'; \
 } > /usr/local/etc/php/conf.d/custom-limits.ini
 
+# Tuned Apache MPM Prefork configuration (reduces memory consumption to ~250MB & recycles workers)
+RUN { \
+    echo '<IfModule mpm_prefork_module>'; \
+    echo '    StartServers             2'; \
+    echo '    MinSpareServers          2'; \
+    echo '    MaxSpareServers          4'; \
+    echo '    MaxRequestWorkers        8'; \
+    echo '    MaxConnectionsPerChild   300'; \
+    echo '</IfModule>'; \
+} > /etc/apache2/mods-available/mpm_prefork.conf
+
 # Move custom plugins bundled in this repo to the WordPress plugins directory.
 # The plugins/ directory inside the theme is a deviation from WP conventions —
 # this step corrects the layout at build time.
