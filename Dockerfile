@@ -1,4 +1,13 @@
-FROM wordpress:6.7-php8.2-apache
+FROM wordpress:6.9-php8.2-apache
+
+# Custom PHP limits for WordPress & large plugins (WooCommerce, Jetpack, ACF, etc.)
+RUN { \
+    echo 'memory_limit = 512M'; \
+    echo 'max_execution_time = 300'; \
+    echo 'upload_max_filesize = 128M'; \
+    echo 'post_max_size = 128M'; \
+    echo 'max_input_time = 300'; \
+} > /usr/local/etc/php/conf.d/custom-limits.ini
 
 # Move custom plugins bundled in this repo to the WordPress plugins directory.
 # The plugins/ directory inside the theme is a deviation from WP conventions —
@@ -9,8 +18,10 @@ COPY plugins/ /var/www/html/wp-content/plugins/
 # .dockerignore excludes the directories above at build context level.
 COPY . /var/www/html/wp-content/themes/site-okbr/
 
-# Remove the plugins copy that ended up inside the theme directory.
+# Remove redundant plugins copy inside theme and symlink to wp-content/plugins for compatibility.
 RUN rm -rf /var/www/html/wp-content/themes/site-okbr/plugins \
+    && ln -sf /var/www/html/wp-content/plugins /var/www/html/wp-content/themes/site-okbr/plugins \
     && chown -R www-data:www-data \
          /var/www/html/wp-content/themes/site-okbr \
          /var/www/html/wp-content/plugins
+

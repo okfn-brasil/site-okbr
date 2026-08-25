@@ -110,10 +110,17 @@ jobs:
             --from-literal=WORDPRESS_DB_PASSWORD="${DB_PASSWORD}" \
             --from-literal=MARIADB_ROOT_PASSWORD="${MARIADB_ROOT_PASSWORD}" \
             --from-literal=WORDPRESS_CONFIG_EXTRA="
+          if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']) && \$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+              \$_SERVER['HTTPS'] = 'on';
+          }
           define('WP_HOME',    'https://${WP_DOMAIN}');
           define('WP_SITEURL', 'https://${WP_DOMAIN}');
           ${WORDPRESS_AUTH_SALTS}
-          define('WP_MEMORY_LIMIT', '128M');
+          define('FS_METHOD', 'direct');
+          @ini_set('memory_limit', '512M');
+          @ini_set('max_execution_time', '300');
+          define('WP_MEMORY_LIMIT', '512M');
+          define('WP_MAX_MEMORY_LIMIT', '512M');
           define('FORCE_SSL_ADMIN', true);" \
             --dry-run=client -o yaml | kubectl apply -f -
 
@@ -205,10 +212,17 @@ jobs:
             --from-literal=WORDPRESS_DB_PASSWORD="${DB_PASSWORD}" \
             --from-literal=MARIADB_ROOT_PASSWORD="${MARIADB_ROOT_PASSWORD}" \
             --from-literal=WORDPRESS_CONFIG_EXTRA="
+          if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']) && \$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+              \$_SERVER['HTTPS'] = 'on';
+          }
           define('WP_HOME',    'https://${WP_DOMAIN}');
           define('WP_SITEURL', 'https://${WP_DOMAIN}');
           ${WORDPRESS_AUTH_SALTS}
-          define('WP_MEMORY_LIMIT', '256M');
+          define('FS_METHOD', 'direct');
+          @ini_set('memory_limit', '512M');
+          @ini_set('max_execution_time', '300');
+          define('WP_MEMORY_LIMIT', '512M');
+          define('WP_MAX_MEMORY_LIMIT', '512M');
           define('FORCE_SSL_ADMIN', true);" \
             --dry-run=client -o yaml | kubectl apply -f -
 

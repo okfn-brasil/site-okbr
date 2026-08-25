@@ -14,3 +14,18 @@ spec:
   resources:
     requests:
       storage: 10Gi
+---
+# Armazena os plugins do WordPress (wp-content/plugins/).
+# Permite instalar/atualizar plugins via painel ou WP-CLI com persistência entre deploys.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress-plugins
+  namespace: openknowledge
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-block-hdd
+  resources:
+    requests:
+      storage: 10Gi
