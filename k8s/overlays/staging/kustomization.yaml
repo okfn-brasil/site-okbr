@@ -108,12 +108,4 @@ patches:
         value: "5Gi"
     target:
       kind: PersistentVolumeClaim
-      name: wordpress-uploads
-
-  - patch: |-
-      - op: replace
-        path: /spec/resources/requests/storage
-        value: "5Gi"
-    target:
-      kind: PersistentVolumeClaim
       name: wordpress-plugins

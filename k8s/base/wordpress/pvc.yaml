@@ -13,7 +13,7 @@ spec:
   storageClassName: ceph-block-hdd
   resources:
     requests:
-      storage: 10Gi
+      storage: 20Gi
 ---
 # Armazena os plugins do WordPress (wp-content/plugins/).
 # Permite instalar/atualizar plugins via painel ou WP-CLI com persistência entre deploys.
