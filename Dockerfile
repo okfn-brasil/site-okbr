@@ -1,4 +1,4 @@
-FROM wordpress:6.9-php8.2-apache
+FROM wordpress:php8.4-apache
 
 # Custom PHP limits for WordPress & large plugins (WooCommerce, Jetpack, ACF, etc.)
 RUN { \
