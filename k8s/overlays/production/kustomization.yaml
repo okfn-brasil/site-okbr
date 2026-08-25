@@ -30,6 +30,15 @@ patches:
       kind: StatefulSet
       name: mariadb
 
+  # ── StatefulSet: VolumeClaimTemplate 20Gi para produção ───────────────────
+  - patch: |-
+      - op: replace
+        path: /spec/volumeClaimTemplates/0/spec/resources/requests/storage
+        value: "20Gi"
+    target:
+      kind: StatefulSet
+      name: mariadb
+
   # ── ConfigMap: DB_HOST aponta para o serviço prod dentro do mesmo ns ──────
   - patch: |-
       - op: replace
