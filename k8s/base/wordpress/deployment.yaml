@@ -18,6 +18,25 @@ spec:
       labels:
         app: wordpress
     spec:
+      securityContext:
+        fsGroup: 33
+      initContainers:
+        - name: init-plugins
+          image: ghcr.io/okfn-brasil/site-okbr:latest
+          imagePullPolicy: IfNotPresent
+          command:
+            - bash
+            - -c
+            - |
+              if [ ! -f /target-plugins/.initialized ]; then
+                echo "Inicializando volume de plugins a partir da imagem..."
+                cp -rn /var/www/html/wp-content/plugins/. /target-plugins/ || true
+                touch /target-plugins/.initialized
+              fi
+              chown -R 33:33 /target-plugins
+          volumeMounts:
+            - name: plugins
+              mountPath: /target-plugins
       containers:
         - name: wordpress
           image: ghcr.io/okfn-brasil/site-okbr:latest
@@ -42,16 +61,40 @@ spec:
                   key: WORDPRESS_CONFIG_EXTRA
           ports:
             - containerPort: 80
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - bash
+                  - -c
+                  - |
+                    echo "memory_limit = 512M" > /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "max_execution_time = 300" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "upload_max_filesize = 128M" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "post_max_size = 128M" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "max_input_time = 300" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.enable = 1" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.enable_cli = 1" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.memory_consumption = 256" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.interned_strings_buffer = 16" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.max_accelerated_files = 10000" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.validate_timestamps = 1" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    echo "opcache.revalidate_freq = 2" >> /usr/local/etc/php/conf.d/custom-limits.ini
+                    mkdir -p /var/www/html/wp-content/upgrade /var/www/html/wp-content/languages /var/www/html/wp-content/uploads /var/www/html/wp-content/plugins /var/www/html/wp-content/cache
+                    chown -R www-data:www-data /var/www/html/wp-content
+                    chmod -R 775 /var/www/html/wp-content
           volumeMounts:
             - name: uploads
               mountPath: /var/www/html/wp-content/uploads
+            - name: plugins
+              mountPath: /var/www/html/wp-content/plugins
           resources:
             requests:
               cpu: "100m"
               memory: "256Mi"
             limits:
               cpu: "1000m"
-              memory: "512Mi"
+              memory: "1Gi"
           readinessProbe:
             httpGet:
               path: /wp-login.php
@@ -69,3 +112,6 @@ spec:
         - name: uploads
           persistentVolumeClaim:
             claimName: wordpress-uploads
+        - name: plugins
+          persistentVolumeClaim:
+            claimName: wordpress-plugins

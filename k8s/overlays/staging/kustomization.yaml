@@ -16,6 +16,7 @@ labels:
 resources:
   - ../../base
   - certificate.yaml
+  - middleware-basic-auth.yaml
 
 images:
   - name: ghcr.io/okfn-brasil/site-okbr
@@ -50,6 +51,9 @@ patches:
           routes:
             - match: "Host(`<STAGING_DOMAIN_PLACEHOLDER>`)"
               kind: Rule
+              middlewares:
+                - name: staging-basic-auth
+                  namespace: openknowledge
               services:
                 - name: staging-wordpress
                   port: 80
@@ -85,10 +89,10 @@ patches:
   - patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/resources/requests/memory
-        value: "128Mi"
+        value: "256Mi"
       - op: replace
         path: /spec/template/spec/containers/0/resources/limits/memory
-        value: "256Mi"
+        value: "512Mi"
     target:
       kind: Deployment
       name: wordpress
@@ -108,4 +112,4 @@ patches:
         value: "5Gi"
     target:
       kind: PersistentVolumeClaim
-      name: wordpress-uploads
+      name: wordpress-plugins

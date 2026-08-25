@@ -1,4 +1,36 @@
-FROM wordpress:6.7-php8.2-apache
+FROM wordpress:php8.4-apache
+
+# Install WP-CLI for automated administration and language configuration
+RUN curl -s -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp
+
+# Custom PHP limits & OPcache optimization for WordPress
+RUN { \
+    echo 'memory_limit = 512M'; \
+    echo 'max_execution_time = 300'; \
+    echo 'upload_max_filesize = 128M'; \
+    echo 'post_max_size = 128M'; \
+    echo 'max_input_time = 300'; \
+    echo 'opcache.enable = 1'; \
+    echo 'opcache.enable_cli = 1'; \
+    echo 'opcache.memory_consumption = 256'; \
+    echo 'opcache.interned_strings_buffer = 16'; \
+    echo 'opcache.max_accelerated_files = 10000'; \
+    echo 'opcache.validate_timestamps = 1'; \
+    echo 'opcache.revalidate_freq = 2'; \
+} > /usr/local/etc/php/conf.d/custom-limits.ini
+
+# Tuned Apache MPM Prefork configuration (reduces memory consumption to ~250MB & recycles workers)
+RUN { \
+    echo '<IfModule mpm_prefork_module>'; \
+    echo '    StartServers             2'; \
+    echo '    MinSpareServers          2'; \
+    echo '    MaxSpareServers          4'; \
+    echo '    MaxRequestWorkers        8'; \
+    echo '    MaxConnectionsPerChild   300'; \
+    echo '</IfModule>'; \
+} > /etc/apache2/mods-available/mpm_prefork.conf
 
 # Move custom plugins bundled in this repo to the WordPress plugins directory.
 # The plugins/ directory inside the theme is a deviation from WP conventions —
@@ -9,8 +41,10 @@ COPY plugins/ /var/www/html/wp-content/plugins/
 # .dockerignore excludes the directories above at build context level.
 COPY . /var/www/html/wp-content/themes/site-okbr/
 
-# Remove the plugins copy that ended up inside the theme directory.
+# Remove redundant plugins copy inside theme and symlink to wp-content/plugins for compatibility.
 RUN rm -rf /var/www/html/wp-content/themes/site-okbr/plugins \
+    && ln -sf /var/www/html/wp-content/plugins /var/www/html/wp-content/themes/site-okbr/plugins \
     && chown -R www-data:www-data \
          /var/www/html/wp-content/themes/site-okbr \
          /var/www/html/wp-content/plugins
+
