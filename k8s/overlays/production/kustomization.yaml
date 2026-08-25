@@ -2,6 +2,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: openknowledge
+
+# Prefixo em todos os recursos para alinhar com a infraestrutura de produção
+namePrefix: prod-
+
+labels:
+  - pairs:
+      environment: production
+    includeSelectors: true
+
 resources:
   - ../../base
   - certificate.yaml
@@ -11,7 +21,25 @@ images:
     newTag: "latest"  # atualizado automaticamente pelo workflow de CI
 
 patches:
-  # ── IngressRoute HTTPS ──────────────────────────────────────────────────────
+  # ── StatefulSet: serviceName precisa do prefixo ───────────────────────────
+  - patch: |-
+      - op: replace
+        path: /spec/serviceName
+        value: prod-mariadb
+    target:
+      kind: StatefulSet
+      name: mariadb
+
+  # ── ConfigMap: DB_HOST aponta para o serviço prod dentro do mesmo ns ──────
+  - patch: |-
+      - op: replace
+        path: /data/WORDPRESS_DB_HOST
+        value: "prod-mariadb:3306"
+    target:
+      kind: ConfigMap
+      name: wordpress-config
+
+  # ── IngressRoute HTTPS ────────────────────────────────────────────────────
   - patch: |-
       - op: replace
         path: /spec
@@ -19,7 +47,7 @@ patches:
           entryPoints:
             - websecure
           routes:
-            - match: "Host(`<DOMAIN_PLACEHOLDER>`)"
+            - match: "Host(`<DOMAIN_PLACEHOLDER>`) || Host(`www.<DOMAIN_PLACEHOLDER>`)"
               kind: Rule
               middlewares:
                 - name: security-headers
@@ -27,7 +55,7 @@ patches:
                 - name: compression
                   namespace: querido-diario
               services:
-                - name: wordpress
+                - name: prod-wordpress
                   port: 80
           tls:
             secretName: site-okbr-tls
@@ -35,7 +63,7 @@ patches:
       kind: IngressRoute
       name: wordpress
 
-  # ── Namespace: não aplicar (já existe no cluster) ──────────────────────────
+  # ── Namespace: não aplicar (já existe no cluster) ─────────────────────────
   - patch: |-
       $patch: delete
       apiVersion: v1

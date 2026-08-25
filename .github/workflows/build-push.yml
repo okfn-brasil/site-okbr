@@ -229,7 +229,8 @@ jobs:
           WORDPRESS_AUTH_SALTS: ${{ secrets.WORDPRESS_AUTH_SALTS }}
         run: |
           # Sobrescreve o placeholder criado pelo kustomize com os valores reais.
-          kubectl create secret generic wordpress-secret \
+          # O namePrefix prod- faz o secret se chamar prod-wordpress-secret.
+          kubectl create secret generic prod-wordpress-secret \
             -n openknowledge \
             --from-literal=WORDPRESS_DB_USER="${DB_USER}" \
             --from-literal=WORDPRESS_DB_PASSWORD="${DB_PASSWORD}" \
@@ -251,7 +252,7 @@ jobs:
 
       - name: Wait for rollout
         run: |
-          kubectl rollout status deployment/wordpress \
+          kubectl rollout status deployment/prod-wordpress \
             -n openknowledge --timeout=5m
 
       - name: Configure Portuguese (pt_BR) language

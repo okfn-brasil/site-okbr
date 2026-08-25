@@ -12,4 +12,5 @@ spec:
     name: letsencrypt-prod   # confirmar com CCSL o nome do ClusterIssuer
     kind: ClusterIssuer
   dnsNames:
-    - <DOMAIN_PLACEHOLDER>   # ex: ok.org.br e/ou www.ok.org.br
+    - <DOMAIN_PLACEHOLDER>
+    - www.<DOMAIN_PLACEHOLDER>
