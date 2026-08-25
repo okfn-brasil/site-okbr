@@ -53,6 +53,7 @@ patches:
               kind: Rule
               middlewares:
                 - name: staging-basic-auth
+                  namespace: openknowledge
               services:
                 - name: staging-wordpress
                   port: 80
