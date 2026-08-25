@@ -37,14 +37,11 @@ jobs:
       - name: Teardown staging (preserva PVCs)
         run: |
           # Remove todos os recursos de staging EXCETO os PVCs.
-          # Os PVCs (banco + uploads) são preservados para que o próximo deploy
-          # de staging encontre o banco já populado, sem necessidade de re-seed.
-          kubectl delete \
-            deployments,statefulsets,services,configmaps,secrets,\
-            ingressroutes.traefik.io,certificates.cert-manager.io \
-            -n openknowledge \
-            -l environment=staging \
-            --ignore-not-found=true
+          # Os PVCs (banco + uploads + plugins) são preservados para que o próximo deploy
+          # de staging encontre os dados já persistidos.
+          for res in deployments statefulsets services configmaps secrets ingressroutes.traefik.io certificates.cert-manager.io middlewares.traefik.io; do
+            kubectl delete "$res" -n openknowledge -l environment=staging --ignore-not-found=true
+          done
 
       - name: Desconecta VPN
         if: always()
